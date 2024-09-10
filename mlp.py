@@ -15,6 +15,7 @@ class MLP(nn.Module):
         super(MLP, self).__init__()
         layers = []
         in_features = input_size
+
         # Pyramid or tapered structure
         if architecture == 'pyramid':
             for i in range(hidden_layers):
@@ -22,21 +23,26 @@ class MLP(nn.Module):
                 layers.append(nn.Linear(in_features, out_features))
                 layers.append(nn.ReLU())
                 in_features = out_features
+
         # Uniform layer structure
         elif architecture == 'uniform':
             for i in range(hidden_layers):
                 layers.append(nn.Linear(in_features, in_features))
                 layers.append(nn.ReLU())
-        # Bottleneck: reducing neurons
+
+        # Bottleneck: reducing neurons dynamically based on previous layers
         elif architecture == 'bottleneck':
             for i in range(hidden_layers):
                 out_features = max(int(in_features * 0.5), output_size)
                 layers.append(nn.Linear(in_features, out_features))
                 layers.append(nn.ReLU())
                 in_features = out_features
-            layers.append(nn.Linear(in_features, 64))
+            # Instead of a fixed 64, let's make it a fraction of the last layer size
+            bottleneck_size = max(int(in_features * 0.5), output_size)  # Dynamically determine the bottleneck size
+            layers.append(nn.Linear(in_features, bottleneck_size))
             layers.append(nn.ReLU())
-            in_features = 64
+            in_features = bottleneck_size
+
         # Gradual reduction
         elif architecture == 'gradual':
             decrement = (input_size - output_size) // hidden_layers
@@ -83,7 +89,7 @@ def generate_dummy_dataset(input_size, output_size, num_samples, batch_size):
     train_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
     return train_loader
 
-def train(model, train_loader, device, time_limit=180):
+def train(model, train_loader, device, time_limit=75):
     criterion = nn.CrossEntropyLoss() if model.model[-1].out_features > 1 else nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(model.parameters())
     model.to(device)
@@ -128,7 +134,7 @@ if __name__ == '__main__':
     parser.add_argument('--batch_size', type=int, default=32, help='Batch size for training')
     parser.add_argument('--input_size', type=int, required=True, help='Input size (number of features)')
     parser.add_argument('--output_size', type=int, required=True, help='Output size (number of classes or targets)')
-    parser.add_argument('--num_samples', type=int, default=4000, help='Number of samples in the dummy dataset')
+    parser.add_argument('--num_samples', type=int, default=4096, help='Number of samples in the dummy dataset')
     parser.add_argument('--architecture', type=str, choices=['pyramid', 'uniform', 'bottleneck', 'gradual'], default='pyramid', help='Architecture type for the MLP')
     args = parser.parse_args()
     train_loader = generate_dummy_dataset(args.input_size, args.output_size, args.num_samples, args.batch_size)

@@ -5,31 +5,29 @@ import numpy as np
 import multiprocessing
 
 # Directory to save the data logs and outputs
-data_dir = "dataset"
-os.makedirs(data_dir, exist_ok=True)
-
-# List of batch sizes to iterate over
-batch_sizes = [8, 16, 32, 64, 128]
+base_data_dir = "dataset"
+os.makedirs(base_data_dir, exist_ok=True)
 
 # Number of random configurations to generate (instead of models_list.txt)
-num_random_configs = 20  # You can change this to any number of configurations
+num_random_configs = 3000  # You can change this to any number of configurations
 
 # Seed for reproducibility
 np.random.seed(99)
 
 # Function to generate random MLP parameters using NumPy's random.uniform
 def generate_random_mlp_config():
-    input_size = int(np.random.uniform(32, 4096))  # Random input size between 32 and 4096
-    output_size = int(np.random.uniform(2, max(2, input_size // 4)))  # Random output size, smaller than input size
-    depth = int(np.random.uniform(2, 10))  # Random depth (number of hidden layers)
+    input_size = int(np.random.uniform(4, 4096))  # Random input size between 4 and 4096
+    output_size = int(np.random.uniform(1, max(2, input_size // 4)))  # Random output size, smaller than input size
+    batch_size = int(np.random.uniform(1, 256) * 4)  # batch_size
+    depth = int(np.random.uniform(1, 11))  # Random depth (number of hidden layers)
     architecture = np.random.choice(['pyramid', 'uniform', 'bottleneck', 'gradual'])  # Random architecture type
-    return input_size, output_size, depth, architecture
+    return input_size, output_size, depth, architecture, batch_size
 
 # Function to run system monitoring tools (nvidia-smi, dcgmi, top)
-def run_monitoring_tools(config_name, batch_size):
-    file_name1 = os.path.join(data_dir, f"{config_name}_{batch_size}_nvsm.txt")
-    file_name2 = os.path.join(data_dir, f"{config_name}_{batch_size}_dcgm.txt")
-    file_name3 = os.path.join(data_dir, f"{config_name}_{batch_size}_top.txt")
+def run_monitoring_tools(config_dir, file_suffix):
+    file_name1 = os.path.join(config_dir, f"{file_suffix}_nvsm.txt")
+    file_name2 = os.path.join(config_dir, f"{file_suffix}_dcgm.txt")
+    file_name3 = os.path.join(config_dir, f"{file_suffix}_top.txt")
 
     # Run nvidia-smi
     nvidia_smi_cmd = f"nvidia-smi --query-gpu=uuid,memory.used,memory.total --format=csv -l 1 > {file_name1}"
@@ -59,12 +57,19 @@ def kill_monitoring_tools(nvidia_smi_proc, dcgmi_proc, top_proc):
 def run_mlp_experiment(config_name, input_size, output_size, depth, architecture, batch_size):
     print(f"Processing config: {config_name}, input size: {input_size}, output size: {output_size}, depth: {depth}, architecture: {architecture}, Batch size: {batch_size}")
 
-    # Define the output and error file paths
-    out_file = os.path.join(data_dir, f"{config_name}_{batch_size}.out")
-    err_file = os.path.join(data_dir, f"{config_name}_{batch_size}.err")
+    # Create a subdirectory for each configuration inside the base directory
+    config_dir = os.path.join(base_data_dir, config_name)
+    os.makedirs(config_dir, exist_ok=True)
+
+    # Define the file suffix using the MLP parameters concatenated with underscores
+    file_suffix = f"input:{input_size}_output:{output_size}_depth:{depth}_arch:{architecture}_batch:{batch_size}"
+
+    # Define the output and error file paths inside the configuration's directory
+    out_file = os.path.join(config_dir, f"{file_suffix}.out")
+    err_file = os.path.join(config_dir, f"{file_suffix}.err")
 
     # Run monitoring tools
-    nvidia_smi_proc, dcgmi_proc, top_proc = run_monitoring_tools(config_name, batch_size)
+    nvidia_smi_proc, dcgmi_proc, top_proc = run_monitoring_tools(config_dir, file_suffix)
 
     # Command to run the MLP training
     train_cmd = f"CUDA_VISIBLE_DEVICES=0 python mlp.py --input_size {input_size} --output_size {output_size} --depth {depth} --architecture {architecture} --batch_size {batch_size}"
@@ -79,14 +84,15 @@ def run_mlp_experiment(config_name, input_size, output_size, depth, architecture
 
 # Main function to run experiments with random MLP configurations
 def main():
-    for i in range(num_random_configs):
+    for i in range(1, num_random_configs + 1):
         # Generate a random MLP configuration using NumPy's random.uniform
-        input_size, output_size, depth, architecture = generate_random_mlp_config()
-        config_name = f"mlp_config_{i+1}"
+        input_size, output_size, depth, architecture, batch_size = generate_random_mlp_config()
+        
+        # Create a folder with a zero-padded index like "01-mlp_config"
+        config_name = f"{i:02d}-mlp_config"
 
-        # Run the experiment for each batch size
-        for batch_size in batch_sizes:
-            run_mlp_experiment(config_name, input_size, output_size, depth, architecture, batch_size)
+        # Run the experiment for each configuration
+        run_mlp_experiment(config_name, input_size, output_size, depth, architecture, batch_size)
 
 if __name__ == "__main__":
     main()
