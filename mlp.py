@@ -1,143 +1,137 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import DataLoader
-import torchvision.transforms as transforms
-import torchvision.datasets as datasets
+from torch.utils.data import DataLoader, TensorDataset
 import time
+from tqdm import tqdm
 from torchsummary import summary
-from tqdm import tqdm  # Import tqdm for progress bars
+import numpy as np
+from multiprocessing import Pool, cpu_count
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-# Define the MLP model
 class MLP(nn.Module):
-    def __init__(self, input_size, output_size, hidden_layers, width):
+    def __init__(self, input_size, output_size, hidden_layers, architecture='pyramid'):
         super(MLP, self).__init__()
         layers = []
         in_features = input_size
-        
-        # Adding hidden layers based on depth (number of hidden_layers) and width
-        for _ in range(hidden_layers):
-            layers.append(nn.Linear(in_features, width))
+        # Pyramid or tapered structure
+        if architecture == 'pyramid':
+            for i in range(hidden_layers):
+                out_features = max(int(in_features * 0.5), output_size)
+                layers.append(nn.Linear(in_features, out_features))
+                layers.append(nn.ReLU())
+                in_features = out_features
+        # Uniform layer structure
+        elif architecture == 'uniform':
+            for i in range(hidden_layers):
+                layers.append(nn.Linear(in_features, in_features))
+                layers.append(nn.ReLU())
+        # Bottleneck: reducing neurons
+        elif architecture == 'bottleneck':
+            for i in range(hidden_layers):
+                out_features = max(int(in_features * 0.5), output_size)
+                layers.append(nn.Linear(in_features, out_features))
+                layers.append(nn.ReLU())
+                in_features = out_features
+            layers.append(nn.Linear(in_features, 64))
             layers.append(nn.ReLU())
-            in_features = width
-        
-        # Final output layer
-        layers.append(nn.Linear(width, output_size))
+            in_features = 64
+        # Gradual reduction
+        elif architecture == 'gradual':
+            decrement = (input_size - output_size) // hidden_layers
+            for i in range(hidden_layers):
+                out_features = max(in_features - decrement, output_size)
+                layers.append(nn.Linear(in_features, out_features))
+                layers.append(nn.ReLU())
+                in_features = out_features
+        layers.append(nn.Linear(in_features, output_size))
         self.model = nn.Sequential(*layers)
 
     def forward(self, x):
         return self.model(x)
 
-# Dataset loading function
-def load_dataset(dataset_name, batch_size):
-    transform = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.5,), (0.5,))
-    ])
-    
-    if dataset_name == 'mnist':
-        trainset = datasets.MNIST(root='./data', train=True, download=True, transform=transform)
-        input_size = 28 * 28  # For MNIST, 28x28 images
-        output_size = 10      # 10 classes
-    elif dataset_name == 'cifar10':
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-        ])
-        trainset = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
-        input_size = 32 * 32 * 3  # CIFAR10 images are 32x32 with 3 channels (RGB)
-        output_size = 10          # 10 classes
-    elif dataset_name == 'cifar100':
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-        ])
-        trainset = datasets.CIFAR100(root='./data', train=True, download=True, transform=transform)
-        input_size = 32 * 32 * 3  # CIFAR100 images are 32x32 with 3 channels (RGB)
-        output_size = 100         # 100 classes
-    elif dataset_name == 'imagenet':
-        transform = transforms.Compose([
-            transforms.Resize(256),
-            transforms.CenterCrop(224),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-        ])
-        trainset = datasets.ImageFolder(root='/raid/datasets/imagenet/train', transform=transform)
-        input_size = 224 * 224 * 3  # ImageNet has larger images, 224x224 with 3 channels
-        output_size = 1000          # 1000 classes
+def generate_labels(output_size, num_samples):
+    if output_size == 1:
+        return torch.randint(0, 2, (num_samples,))
     else:
-        raise ValueError("Dataset not supported! Choose from 'mnist', 'cifar10', 'cifar100', 'imagenet'.")
+        return torch.randint(0, output_size, (num_samples,))
 
-    train_loader = DataLoader(trainset, batch_size=batch_size, shuffle=True)
-    return train_loader, input_size, output_size
-
-# Train function with progress info and progress bars
-def train(model, train_loader, device, time_limit=180):
-    criterion = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters())
+def generate_dummy_dataset(input_size, output_size, num_samples, batch_size):
+    inputs = torch.randn(num_samples, input_size)
+    # Use multiprocessing to speed up label generation
+    num_cores = min(cpu_count(), num_samples)  # Use as many cores as there are samples, or max available
+    chunk_size = num_samples // num_cores
     
+    pool = Pool(num_cores)
+    # Generate labels in parallel and ensure they match the total number of samples
+    labels_chunks = pool.starmap(generate_labels, [(output_size, chunk_size) for _ in range(num_cores)])
+    
+    # Handle any remaining samples (remainder if num_samples is not divisible by num_cores)
+    remainder = num_samples % num_cores
+    if remainder:
+        labels_chunks.append(generate_labels(output_size, remainder))
+    
+    labels = torch.cat(labels_chunks)
+    pool.close()
+    pool.join()
+    
+    # Ensure the inputs and labels have matching sizes
+    assert len(inputs) == len(labels), f"Size mismatch: inputs ({len(inputs)}) and labels ({len(labels)})"
+    
+    dataset = TensorDataset(inputs, labels)
+    train_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+    return train_loader
+
+def train(model, train_loader, device, time_limit=180):
+    criterion = nn.CrossEntropyLoss() if model.model[-1].out_features > 1 else nn.BCEWithLogitsLoss()
+    optimizer = optim.Adam(model.parameters())
     model.to(device)
     start_time = time.time()
-
     epoch = 0
-    while True:  # Infinite loop, training will stop after 3 minutes
+    progress_bar = tqdm(total=100, desc="Training Progress", position=0, leave=True)
+
+    while True:
         epoch_loss = 0.0
         total_batches = len(train_loader)
-
-        # Progress bar for the epoch
-        with tqdm(total=total_batches, desc=f'Epoch {epoch + 1}', unit='batch') as pbar:
+        with tqdm(total=total_batches, desc=f'Epoch {epoch + 1}', unit='batch', leave=False) as pbar:
             for batch_idx, (inputs, labels) in enumerate(train_loader):
-                # Check if time limit has been exceeded
                 if time.time() - start_time > time_limit:
                     print(f"Training stopped due to time limit ({time_limit} seconds)")
+                    progress_bar.close()  # Close the progress bar when stopping
                     return
-                
                 inputs, labels = inputs.to(device), labels.to(device)
                 optimizer.zero_grad()
-                outputs = model(inputs.view(inputs.size(0), -1))  # Flatten the inputs for MLP
+                outputs = model(inputs)
                 loss = criterion(outputs, labels)
                 loss.backward()
                 optimizer.step()
-                
                 epoch_loss += loss.item()
-                
-                # Update progress bar
                 pbar.update(1)
                 pbar.set_postfix(loss=loss.item())
-        
-        # Print epoch progress
-        avg_loss = epoch_loss / total_batches
-        print(f"Epoch {epoch + 1} complete. Average Loss: {avg_loss:.4f}")
+                
+                # Update the main progress bar based on time elapsed
+                time_progress = (time.time() - start_time) / time_limit
+                progress_bar.n = min(int(time_progress * 100), 100)
+                progress_bar.refresh()
+
+        print(f"Epoch {epoch + 1} complete. Average Loss: {epoch_loss / total_batches:.4f}")
         epoch += 1
+        progress_bar.update(1)
+
+    progress_bar.close()  # Ensure progress bar is closed when training ends
 
 if __name__ == '__main__':
     import argparse
-    parser = argparse.ArgumentParser(description='Train a configurable MLP on MNIST, CIFAR10, CIFAR100, or ImageNet.')
-    
-    # Add command-line arguments for depth, width, batch size, and dataset selection
+    parser = argparse.ArgumentParser(description='Train a configurable MLP with different architectures on a dummy dataset.')
     parser.add_argument('--depth', type=int, default=3, help='Number of hidden layers (depth of the MLP)')
-    parser.add_argument('--width', type=int, default=128, help='Number of neurons in each hidden layer (width)')
     parser.add_argument('--batch_size', type=int, default=32, help='Batch size for training')
-    parser.add_argument('--dataset', type=str, choices=['mnist', 'cifar10', 'cifar100', 'imagenet'], default='mnist', help='Dataset to train on')
-    
+    parser.add_argument('--input_size', type=int, required=True, help='Input size (number of features)')
+    parser.add_argument('--output_size', type=int, required=True, help='Output size (number of classes or targets)')
+    parser.add_argument('--num_samples', type=int, default=4000, help='Number of samples in the dummy dataset')
+    parser.add_argument('--architecture', type=str, choices=['pyramid', 'uniform', 'bottleneck', 'gradual'], default='pyramid', help='Architecture type for the MLP')
     args = parser.parse_args()
-
-    # Hyperparameters from the command-line arguments
-    depth = args.depth
-    width = args.width
-    batch_size = args.batch_size
-    dataset_name = args.dataset
-
-    # Load the dataset
-    train_loader, input_size, output_size = load_dataset(dataset_name, batch_size)
-
-    # Create the MLP model
-    model = MLP(input_size, output_size, depth, width).to(device)
-
-    # Print model summary
-    summary(model, input_size=(1, input_size), device=device)
-    
-    # Train the model with a time limit of 3 minutes (180 seconds)
-    train(model, train_loader, device, time_limit=180)
+    train_loader = generate_dummy_dataset(args.input_size, args.output_size, args.num_samples, args.batch_size)
+    model = MLP(args.input_size, args.output_size, args.depth, args.architecture).to(device)
+    summary(model, input_size=(1, args.input_size), device=device)
+    train(model, train_loader, device)
