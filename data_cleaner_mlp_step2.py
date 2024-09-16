@@ -13,21 +13,31 @@ def most_frequent_activation_function(activation_functions):
     
     return most_common_activation
 
+
 # Extract model info from the .out file (Torch summary)
 def extract_model_info(out_file):
     with open(out_file, 'r') as file:
         lines = file.readlines()
 
     activations_params = []
-    activation_functions = []
     total_params = 0
     total_activations = 0
     depth = 0
+    batch_norm_count = 0
+    dropout_count = 0
+    activation_functions = []
+
+    # List of activation function names to check
+    valid_activations = [
+        "ReLU", "Sigmoid", "Tanh", "LeakyReLU", "PReLU", "ELU", "SELU", "Softplus", 
+        "SiLU", "Mish", "GELU", "Identity", "Softmax"
+    ]
 
     for line in lines:
+        
         if "Linear-" in line:
             depth += 1
-            output_shape = re.findall(r'\[\-1, 1, (\d+)\]', line)
+            output_shape = re.findall(r'\[\-1, (\d+)\]', line)
             param_count = re.findall(r'(\d{1,3}(?:,\d{3})*)$', line)
             if output_shape and param_count:
                 activations = int(output_shape[0])
@@ -36,8 +46,30 @@ def extract_model_info(out_file):
                 total_params += params
                 total_activations += activations
 
-        elif "ReLU-" in line:
-            output_shape = re.findall(r'\[\-1, 1, (\d+)\]', line)
+        # BatchNorm layers
+        elif "BatchNorm" in line:
+            batch_norm_count += 1
+            output_shape = re.findall(r'\[\-1, (\d+)\]', line)
+            param_count = re.findall(r'(\d{1,3}(?:,\d{3})*)$', line)
+            if output_shape and param_count:
+                activations = int(output_shape[0])
+                params = int(param_count[0].replace(',', ''))
+                activations_params.append((activations, params))
+                total_params += params
+                total_activations += activations
+        
+        # Dropout layers (no parameters, just activations)
+        elif "Dropout" in line:
+            dropout_count += 1
+            output_shape = re.findall(r'\[\-1, (\d+)\]', line)
+            if output_shape:
+                activations = int(output_shape[0])
+                activations_params.append((activations, 0))  # No parameters for Dropout layers
+                total_activations += activations
+
+        # Activation layers (e.g., ReLU, SELU, Softmax, etc.)
+        elif any(act in line for act in valid_activations):
+            output_shape = re.findall(r'\[\-1, (\d+)\]', line)
             activation_func = re.findall(r'([A-Za-z]+)-\d+', line)
             if output_shape and activation_func:
                 activations = int(output_shape[0])
@@ -45,11 +77,10 @@ def extract_model_info(out_file):
                 total_activations += activations
                 activation_functions.append(activation_func[0])  # Add the activation function used
 
+    # print(activations_params)
     activation_function = most_frequent_activation_function(activation_functions)
 
-    # print(activation_function)
-    
-    return activations_params, activation_function, depth, total_params, total_activations
+    return activations_params, activation_function, depth, total_params, total_activations, batch_norm_count, dropout_count
 
 # Extract batch size from the filename
 def extract_batch_size(filename):
@@ -123,7 +154,7 @@ def extract_and_average_dcgmi(file_path):
 # Process the entire dataset folder
 def process_dataset(dataset_dir, output_csv):
     with open(output_csv, mode='w', newline='') as csv_file:
-        fieldnames = ['Filename', 'Depth', 'Activations-Params', 'Activation Function', 'Total Activations', 'Total Parameters', 'Batch Size', 
+        fieldnames = ['Filename', 'Depth', 'Activations-Params', 'Activation Function', 'Total Activations', 'Total Parameters', 'Batch Size', 'Batch Normalization Layers', 'Dropout Layers',
                       'Max GPU Memory (MiB)', 'Avg GPUTL', 'Avg GRACT', 'Avg SMACT', 'Avg SMOCC', 'Avg FP32A']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
@@ -132,9 +163,10 @@ def process_dataset(dataset_dir, output_csv):
             for file in files:
                 if file.endswith('.out'):
                     out_file_path = os.path.join(root, file)
-                    activations_params, activation_function, depth, total_params, total_activations = extract_model_info(out_file_path)
+                    activations_params, activation_function, depth, total_params, total_activations, batch_norm_count, dropout_count = extract_model_info(out_file_path)
                     batch_size = extract_batch_size(file)
 
+                    
                     # Get the corresponding nvsm file
                     nvsm_file_pattern = file.replace('.out', '_nvsm.txt')
                     nvsm_file_path = os.path.join(root, nvsm_file_pattern)
@@ -152,7 +184,7 @@ def process_dataset(dataset_dir, output_csv):
                         avg_gputl, avg_gract, avg_smact, avg_smocc, avg_fp32a = extract_and_average_dcgmi(dcgm_file_path)
                     else:
                         avg_gputl, avg_gract, avg_smact, avg_smocc, avg_fp32a = {col: None for col in ["GPUTL", "GRACT", "SMACT", "SMOCC", "FP32A"]}
-                    
+                        
                     writer.writerow({
                         'Filename': file,
                         'Depth': depth,
@@ -161,6 +193,8 @@ def process_dataset(dataset_dir, output_csv):
                         'Total Activations': total_activations,
                         'Total Parameters': total_params,
                         'Batch Size': batch_size,
+                        'Batch Normalization Layers': batch_norm_count,
+                        'Dropout Layers': dropout_count,
                         'Max GPU Memory (MiB)': max_gpu_memory,
                         'Avg GPUTL': avg_gputl,
                         'Avg GRACT': avg_gract,
@@ -170,6 +204,6 @@ def process_dataset(dataset_dir, output_csv):
                     })
 
 if __name__ == "__main__":
-    dataset_directory = "mlp_dataset_step1"  # Replace with the actual dataset directory path
-    output_csv_path = "mlp_data_step1.csv"  # Specify the desired output CSV file
+    dataset_directory = "mlp_dataset_step2"  # Replace with the actual dataset directory path
+    output_csv_path = "mlp_data_step2.csv"  # Specify the desired output CSV file
     process_dataset(dataset_directory, output_csv_path)
