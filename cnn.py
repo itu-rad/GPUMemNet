@@ -7,20 +7,40 @@ from multiprocessing import Pool, cpu_count
 import time
 from torchsummary import summary
 from tqdm import tqdm
+import random
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+# Define dictionary for supported activation functions
+activation_functions = {
+    'relu': nn.ReLU,
+    'leaky_relu': nn.LeakyReLU,
+    'prelu': nn.PReLU,
+    'elu': nn.ELU,
+    'selu': nn.SELU,
+    'gelu': nn.GELU,
+    'tanh': nn.Tanh,
+    'sigmoid': nn.Sigmoid,
+    'swish': nn.SiLU,  # Also known as Swish
+    'softplus': nn.Softplus,
+    'mish': nn.Mish
+}
 
 # Define your CNN architecture class
 class CNN(nn.Module):
     def __init__(self, input_channels=3, num_classes=10, architecture='pyramid', 
                  base_num_filters=32, filter_size=3, depth=4, 
                  use_pooling=True, use_dropout=True, dropout_rate=0.5, input_size=(128, 128),
-                 use_skip=True, use_dilated=True, use_depthwise_separable=True):
+                 use_skip=True, use_dilated=True, use_depthwise_separable=True, 
+                 use_batch_norm=False, activation_function='relu'):
         super(CNN, self).__init__()
 
         layers = []
         in_channels = input_channels
         current_size = input_size  # Track the size of the input at each layer
+
+        # Choose activation function based on input
+        activation_fn = activation_functions.get(activation_function, nn.ReLU)  # Default to ReLU if not specified
 
         # Set number of filters and kernel sizes based on architecture type
         if architecture == 'pyramid':
@@ -55,18 +75,24 @@ class CNN(nn.Module):
             else:
                 layers.append(nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, stride=stride, padding=1))
             
-            layers.append(nn.ReLU())
+            # Add batch normalization if enabled
+            if use_batch_norm:
+                layers.append(nn.BatchNorm2d(out_channels))
+
+            layers.append(activation_fn())
 
             # Apply dilated convolution if selected
             if use_dilated:
                 layers.append(nn.Conv2d(out_channels, out_channels, kernel_size=kernel_size, stride=1, padding=2, dilation=2))
-                layers.append(nn.ReLU())
+                if use_batch_norm:
+                    layers.append(nn.BatchNorm2d(out_channels))
+                layers.append(activation_fn())
 
             # Apply skip connections for residual architecture
             if use_skip and i > 0 and architecture == 'residual':
                 skip_connection = nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride)
                 layers.append(skip_connection)
-                layers.append(nn.ReLU())
+                layers.append(activation_fn())
 
             # Apply dense connections for DenseNet-style architecture
             if architecture == 'dense' and i > 0:
@@ -100,11 +126,23 @@ class CNN(nn.Module):
         self.fc1 = nn.Linear(final_size, 128)
         self.fc2 = nn.Linear(128, num_classes)
 
+        # Decide the final activation intelligently
+        if num_classes == 1:
+            if random.random() < 0.5:
+                print("Chosen Sigmoid for binary classification")
+                self.final_activation = nn.Sigmoid()  # Binary classification
+            else:
+                print("Chosen no activation for regression")
+                self.final_activation = nn.Identity()  # Regression
+        else:
+            self.final_activation = nn.Softmax(dim=1)  # Multi-class classification
+
     def forward(self, x):
         x = self.conv_layers(x)
         x = x.view(x.size(0), -1)
         x = self.fc1(x)
         x = self.fc2(x)
+        x = self.final_activation(x)
         return x
 
 # Label generation function
@@ -142,7 +180,7 @@ def train_model(model, input_shape, num_classes, batch_size=128, learning_rate=0
     data_loader = generate_dummy_dataset(input_shape, num_classes, dataset_size, batch_size)
 
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.CrossEntropyLoss() if num_classes > 1 else nn.BCELoss()
 
     model.train()
 
@@ -181,7 +219,9 @@ if __name__ == '__main__':
     parser.add_argument('--use_skip', default=False, action='store_true', help='Use skip connections in CNN')
     parser.add_argument('--use_dilated', default=False, action='store_true', help='Use dilated convolutions in CNN')
     parser.add_argument('--use_depthwise_separable', default=False, action='store_true', help='Use depthwise separable convolutions in CNN')
-    
+    parser.add_argument('--use_batch_norm', default=False, action='store_true', help='Use batch normalization layers')
+    parser.add_argument('--activation_function', type=str, choices=activation_functions.keys(), default='relu', help='Activation function to use in hidden layers')
+
     args = parser.parse_args()
 
     # Create the model
@@ -189,7 +229,8 @@ if __name__ == '__main__':
                 base_num_filters=args.base_num_filters, filter_size=3, 
                 depth=args.depth, use_pooling=args.use_pooling, use_dropout=args.use_dropout, 
                 dropout_rate=args.dropout_rate, input_size=(args.input_size, args.input_size),
-                use_skip=args.use_skip, use_dilated=args.use_dilated, use_depthwise_separable=args.use_depthwise_separable)
+                use_skip=args.use_skip, use_dilated=args.use_dilated, use_depthwise_separable=args.use_depthwise_separable,
+                use_batch_norm=args.use_batch_norm, activation_function=args.activation_function)
 
     summary(model, input_size=(args.channels, args.input_size, args.input_size), device=device)
 
