@@ -92,7 +92,7 @@ def run_cnn_experiment(config_name, input_channels, num_classes, depth, architec
     nvidia_smi_proc, dcgmi_proc, top_proc = run_monitoring_tools(config_dir, file_suffix)
 
     # Command to run the CNN training
-    train_cmd = f"CUDA_VISIBLE_DEVICES=0 python cnn_next.py --input_channels {input_channels} --num_classes {num_classes} --depth {depth} --architecture {architecture} --base_num_filters {base_num_filters} --filter_size {filter_size} --batch_size {batch_size} --input_size {input_size} --activation {activation} --dropout_rate {dropout_rate} {'--use_dropout' if use_dropout else ''} {'--use_batch_norm' if use_batch_norm else ''} {'--use_skip' if use_skip else ''} {'--use_dilated' if use_dilated else ''} {'--use_depthwise_separable' if use_depthwise_separable else ''}"
+    train_cmd = f"CUDA_VISIBLE_DEVICES=0 python cnn.py --input_channels {input_channels} --num_classes {num_classes} --depth {depth} --architecture {architecture} --base_num_filters {base_num_filters} --filter_size {filter_size} --batch_size {batch_size} --input_size {input_size} --activation {activation} --dropout_rate {dropout_rate} {'--use_dropout' if use_dropout else ''} {'--use_batch_norm' if use_batch_norm else ''} {'--use_skip' if use_skip else ''} {'--use_dilated' if use_dilated else ''} {'--use_depthwise_separable' if use_depthwise_separable else ''}"
 
     # Execute the CNN training and redirect output and error
     with open(out_file, "w") as out_f, open(err_file, "w") as err_f:
