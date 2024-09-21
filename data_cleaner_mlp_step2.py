@@ -42,7 +42,7 @@ def extract_model_info(out_file):
             if output_shape and param_count:
                 activations = int(output_shape[0])
                 params = int(param_count[0].replace(',', ''))
-                activations_params.append((activations, params))
+                activations_params.append(("linear", activations, params))
                 total_params += params
                 total_activations += activations
 
@@ -54,7 +54,7 @@ def extract_model_info(out_file):
             if output_shape and param_count:
                 activations = int(output_shape[0])
                 params = int(param_count[0].replace(',', ''))
-                activations_params.append((activations, params))
+                activations_params.append(("batch_normalization", activations, params))
                 total_params += params
                 total_activations += activations
         
@@ -64,7 +64,7 @@ def extract_model_info(out_file):
             output_shape = re.findall(r'\[\-1, (\d+)\]', line)
             if output_shape:
                 activations = int(output_shape[0])
-                activations_params.append((activations, 0))  # No parameters for Dropout layers
+                activations_params.append(("dropout", activations, 0))  # No parameters for Dropout layers
                 total_activations += activations
 
         # Activation layers (e.g., ReLU, SELU, Softmax, etc.)
@@ -73,7 +73,7 @@ def extract_model_info(out_file):
             activation_func = re.findall(r'([A-Za-z]+)-\d+', line)
             if output_shape and activation_func:
                 activations = int(output_shape[0])
-                activations_params.append((activations, 0))  # No parameters for activation layers
+                activations_params.append((activation_func[0], activations, 0))  # No parameters for activation layers
                 total_activations += activations
                 activation_functions.append(activation_func[0])  # Add the activation function used
 
