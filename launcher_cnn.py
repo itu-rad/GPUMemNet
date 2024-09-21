@@ -17,9 +17,13 @@ np.random.seed(99)
 # Function to generate random CNN parameters using NumPy's random.uniform
 def generate_random_cnn_config():
     input_channels = int(np.random.choice([1, 3]))  # Randomly select between grayscale (1) and RGB (3) channels
-    num_classes = int(np.random.uniform(2, 22000))  # Random number of output classes (2-100 for classification)
-    base_num_filters = int(np.random.uniform(16, 512))  # Base number of filters between 16 and 512
-    depth = int(np.random.uniform(1, 200))  # Random depth (number of convolutional layers)
+    
+    num_classes = int(np.random.uniform(1, 1001))  # Random number of output classes (2-100 for classification)
+    
+    base_num_filters = int(np.random.uniform(16, 128))  # Base number of filters between 16 and 512
+    
+    depth = int(np.random.uniform(1, 30))  # Random depth (number of convolutional layers)
+    
     architecture = np.random.choice(['pyramid', 'uniform', 'bottleneck', 'gradual', 'hourglass', 'residual', 'dense'])  # Random architecture type
     
     # Randomly choose activation function
@@ -30,12 +34,15 @@ def generate_random_cnn_config():
 
     # Randomly decide whether to use dropout, batch normalization, skip connections, and dilated convolutions
     use_dropout = np.random.choice([True, False])
+
     use_batch_norm = np.random.choice([True, False])
     
     # Input size: common image sizes (e.g., 32x32, 128x128, 224x224, etc.)
-    input_size = int(np.random.choice([28, 32, 64, 128, 224, 299, 334, 512, 1024]))
+    # input_size = int(np.random.choice([28, 32, 64, 128, 224, 299, 334, 512, 1024]))
 
-    batch_size = int(np.random.uniform(1, 256) * 4)   # Batch size (multiple of 4)
+    input_size = int(np.random.uniform(1, 113)) * 2
+
+    batch_size = int(np.random.uniform(1, 32)) * 2
 
     return input_channels, num_classes, depth, architecture, base_num_filters, batch_size, input_size, activation, dropout_rate, use_dropout, use_batch_norm
 
@@ -88,7 +95,7 @@ def run_cnn_experiment(config_name, input_channels, num_classes, depth, architec
     nvidia_smi_proc, dcgmi_proc, top_proc = run_monitoring_tools(config_dir, file_suffix)
 
     # Command to run the CNN training
-    train_cmd = f"CUDA_VISIBLE_DEVICES=0 python cnn.py --channels {input_channels} --num_classes {num_classes} --depth {depth} --architecture {architecture} --base_num_filters {base_num_filters} --batch_size {batch_size} --input_size {input_size} {input_size} --activation {activation} --dropout_rate {dropout_rate} {'--use_dropout' if use_dropout else ''} {'--use_batch_norm' if use_batch_norm else ''}"
+    train_cmd = f"CUDA_VISIBLE_DEVICES=GPU-00f900e0-bb6f-792a-1b8a-597214c7e1a1 python cnn.py --channels {input_channels} --num_classes {num_classes} --depth {depth} --architecture {architecture} --base_num_filters {base_num_filters} --batch_size {batch_size} --input_size {input_size} {input_size} --activation {activation} --dropout_rate {dropout_rate} {'--use_dropout' if use_dropout else ''} {'--use_batch_norm' if use_batch_norm else ''}"
 
     # Execute the CNN training and redirect output and error
     with open(out_file, "w") as out_f, open(err_file, "w") as err_f:
