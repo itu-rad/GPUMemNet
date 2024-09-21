@@ -145,7 +145,9 @@ def extract_model_info(out_file):
                 output_shape = re.findall(r'\[\-1, \d+, (\d+), (\d+)\]', line)
 
                 if "Softmax" in line:
-                    activations_params.append(("Softmax", 0, 0))  # No activations/params for Softmax
+                    output_shape = re.findall(r'\[\-1, (\d+)\]', line)
+                    activations = int(output_shape[0])
+                    activations_params.append(("Softmax", activations, 0))  # No activations/params for Softmax
                 elif output_shape and activation_func:
                     activations = int(output_shape[0][0]) * int(output_shape[0][1])
                     activations_params.append((activation_func[0], activations, 0))  # No parameters for activation layers
