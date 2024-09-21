@@ -26,6 +26,8 @@ def check_for_oom_error(err_file):
         print(f"Error checking {err_file}: {e}")
         return "UNKNOWN_ERROR"
 
+
+# Extract model info from the .out file (Torch summary)
 # Extract model info from the .out file (Torch summary)
 def extract_model_info(out_file):
     try:
@@ -38,11 +40,12 @@ def extract_model_info(out_file):
                 'batchnorm2d': 0,
                 'dropout': 0,
                 'adaptive_avg_pool2d': 0,
-                'linear': 0
+                'linear': 0,
+                'softmax': 0
             }
 
         activations_params = []
-        activation_functions = []
+        activation_functions_list = []
         total_params = 0
         total_activations = 0
         depth = 0  # Counting Conv2d layers
@@ -53,82 +56,85 @@ def extract_model_info(out_file):
             'batchnorm2d': 0,
             'dropout': 0,
             'adaptive_avg_pool2d': 0,
-            'linear': 0
+            'linear': 0,
+            'softmax': 0
         }
 
         for line in lines:
-            # Exclude lines with 'Block' in their name
+            # Skip 'Block' lines
             if "Block" in line:
-                continue  # Skip processing for blocks (e.g., ConvBlock, ResidualBlock)
+                continue
 
-            # Count Conv2d layers for depth and activations/params
+            # Handle Conv2d layers
             if "Conv2d-" in line:
                 depth += 1
-                layer_counts['conv2d'] += 1  # Increment count for Conv2d layers
-                output_shape = re.findall(r'\[\-1, \d+, (\d+), (\d+)\]', line)
+                layer_counts['conv2d'] += 1
+                output_shape = re.findall(r'\[\-1, (\d+), (\d+), (\d+)\]', line)
                 param_count = re.findall(r'(\d{1,3}(?:,\d{3})*)$', line)
                 if output_shape and param_count:
-                    activations = int(output_shape[0][0]) * int(output_shape[0][1])
+                    channels = int(output_shape[0][0])
+                    height = int(output_shape[0][1])
+                    width = int(output_shape[0][2])
+                    activations = channels * height * width
                     params = int(param_count[0].replace(',', ''))
                     activations_params.append(('conv2d', activations, params))
-                    # print(activations_params)
                     total_params += params
                     total_activations += activations
                 else:
                     print(f"Warning: Missing Conv2d data in {out_file}, line: {line.strip()}")
 
-
-            # Count BatchNorm2d layers
+            # Handle BatchNorm2d layers
             elif "BatchNorm2d-" in line:
-                layer_counts['batchnorm2d'] += 1  # Increment count for BatchNorm2d layers
-                output_shape = re.findall(r'\[\-1, \d+, (\d+), (\d+)\]', line)
+                layer_counts['batchnorm2d'] += 1
+                output_shape = re.findall(r'\[\-1, (\d+), (\d+), (\d+)\]', line)
                 param_count = re.findall(r'(\d{1,3}(?:,\d{3})*)$', line)
-
                 if output_shape and param_count:
-                    activations = int(output_shape[0][0]) * int(output_shape[0][1])
+                    channels = int(output_shape[0][0])
+                    height = int(output_shape[0][1])
+                    width = int(output_shape[0][2])
+                    activations = channels * height * width
                     params = int(param_count[0].replace(',', ''))
-                    activations_params.append(("batch_norm2d", activations, params))
-                    # print(activations_params)
+                    activations_params.append(('batchnorm2d', activations, params))
                     total_params += params
                     total_activations += activations
                 else:
                     print(f"Warning: Missing BatchNorm2d data in {out_file}, line: {line.strip()}")
 
-            
-            # Count Dropout layers
+            # Handle Dropout layers
             elif "Dropout-" in line:
-                layer_counts['dropout'] += 1  # Increment count for Dropout layers
-                output_shape = re.findall(r'\[\-1, \d+, (\d+), (\d+)\]', line)
-
+                layer_counts['dropout'] += 1
+                output_shape = re.findall(r'\[\-1, (\d+), (\d+), (\d+)\]', line)
                 if output_shape:
-                    activations = int(output_shape[0][0]) * int(output_shape[0][1])
-                    activations_params.append(('dropout', activations, 0))  # No parameters for dropout
+                    channels = int(output_shape[0][0])
+                    height = int(output_shape[0][1])
+                    width = int(output_shape[0][2])
+                    activations = channels * height * width
+                    activations_params.append(('dropout', activations, 0))
                     total_activations += activations
                 else:
                     print(f"Warning: Missing Dropout data in {out_file}, line: {line.strip()}")
 
-             # Handle Pooling layers (e.g., AdaptiveAvgPool2d) with a fallback for unusual shapes
+            # Handle AdaptiveAvgPool2d layers, including small output shapes like [1,1]
             elif "AdaptiveAvgPool2d-" in line:
                 layer_counts['adaptive_avg_pool2d'] += 1
-                output_shape = re.findall(r'\[\-1, \d+, (\d+), (\d+)\]', line)
+                output_shape = re.findall(r'\[\-1, (\d+), (\d+), (\d+)\]', line)  # Typical shape
                 if not output_shape:
-                    output_shape = re.findall(r'\[\-1, \d+, (\d+)\]', line)  # Fallback for shapes like [-1, 1, 1, 1]
+                    output_shape = re.findall(r'\[\-1, (\d+), (\d+)\]', line)  # Fallback for shapes like [C, 1, 1]
+                if not output_shape:
+                    output_shape = re.findall(r'\[\-1, (\d+)\]', line)  # Fallback for shapes like [C]
                 if output_shape:
-                    activations = int(output_shape[0][0]) * (int(output_shape[0][1]) if len(output_shape[0]) > 1 else 1)
+                    channels = int(output_shape[0][0])
+                    activations = channels  # AdaptiveAvgPool2d typically reduces spatial dimensions to 1x1
                     activations_params.append(('adaptive_avg_pool2d', activations, 0))  # No parameters for pooling
                     total_activations += activations
                 else:
                     print(f"Warning: Missing AdaptiveAvgPool2d data in {out_file}, line: {line.strip()}")
 
-                          
-
-            # Count Linear layers
+            # Handle Linear layers
             elif "Linear-" in line:
-                layer_counts['linear'] += 1  # Increment count for Linear layers
+                layer_counts['linear'] += 1
                 output_shape = re.findall(r'\[\-1, (\d+)\]', line)
                 param_count = re.findall(r'(\d{1,3}(?:,\d{3})*)$', line)
-
-                # print(output_shape, param_count)
                 if output_shape and param_count:
                     activations = int(output_shape[0])
                     params = int(param_count[0].replace(',', ''))
@@ -138,39 +144,46 @@ def extract_model_info(out_file):
                 else:
                     print(f"Warning: Missing Linear data in {out_file}, line: {line.strip()}")
 
-
-            # Activation layers (track the activation function only)
-            elif re.search(r'([A-Za-z]+)-\d+', line):
-                activation_func = re.findall(r'([A-Za-z]+)-\d+', line)
-                output_shape = re.findall(r'\[\-1, \d+, (\d+), (\d+)\]', line)
-
-                if "Softmax" in line:
-                    output_shape = re.findall(r'\[\-1, (\d+)\]', line)
+            # Handle Softmax layers
+            elif "Softmax-" in line:
+                layer_counts['softmax'] += 1
+                output_shape = re.findall(r'\[\-1, (\d+)\]', line)  # Softmax typically has a 1D output
+                if output_shape:
                     activations = int(output_shape[0])
-                    activations_params.append(("Softmax", activations, 0))  # No activations/params for Softmax
-                elif output_shape and activation_func:
-                    activations = int(output_shape[0][0]) * int(output_shape[0][1])
-                    activations_params.append((activation_func[0], activations, 0))  # No parameters for activation layers
+                    activations_params.append(('softmax', activations, 0))  # Softmax has no trainable parameters
                     total_activations += activations
-                    activation_functions.append(activation_func[0])
+                else:
+                    print(f"Warning: Missing Softmax data in {out_file}, line: {line.strip()}")
+
+            # Dynamically handle activation functions by identifying any name with common patterns
+            elif re.search(r'(ReLU|LeakyReLU|PReLU|ELU|SELU|GELU|Tanh|SiLU|Softplus|Mish)-\d+', line):
+                activation_func = re.findall(r'(ReLU|LeakyReLU|PReLU|ELU|SELU|GELU|Tanh|SiLU|Softplus|Mish)-\d+', line)[0]
+                output_shape = re.findall(r'\[\-1, (\d+), (\d+), (\d+)\]', line)
+                if output_shape:
+                    channels = int(output_shape[0][0])
+                    height = int(output_shape[0][1])
+                    width = int(output_shape[0][2])
+                    activations = channels * height * width
+                    activations_params.append((activation_func, activations, 0))  # No parameters for activation functions
+                    total_activations += activations
+                    activation_functions_list.append(activation_func)
                 else:
                     print(f"Skipping layer: {line.strip()} (no activation data)")
 
-        activation_function = most_frequent_activation_function(activation_functions)
+        activation_function = most_frequent_activation_function(activation_functions_list)
 
         return activations_params, activation_function, depth, total_params, total_activations, layer_counts
 
     except Exception as e:
         print(f"Error processing {out_file}: {e}")
-        # Return default values when processing fails
         return [], 'None', 0, 0, 0, {
             'conv2d': 0,
             'batchnorm2d': 0,
             'dropout': 0,
             'adaptive_avg_pool2d': 0,
-            'linear': 0
+            'linear': 0,
+            'softmax': 0
         }
-
 
 # Extract batch size from the filename
 def extract_batch_size(filename):
