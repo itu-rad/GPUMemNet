@@ -5,7 +5,7 @@ import numpy as np
 import multiprocessing
 
 # Directory to save the data logs and outputs
-base_data_dir = "cnn_dataset_step1"
+base_data_dir = "/home/ehyo/01-new_approach_dataset_fc/cnn_dataset_step2"
 os.makedirs(base_data_dir, exist_ok=True)
 
 # Number of random configurations to generate
@@ -16,11 +16,11 @@ np.random.seed(99)
 
 # Function to generate random CNN parameters using NumPy's random.uniform
 def generate_random_cnn_config():
-    input_channels = int(np.random.choice([1, 3]))  # Randomly select between grayscale (1) and RGB (3) channels
+    input_channels = 3  # Randomly select between grayscale (1) and RGB (3) channels
     
-    num_classes = int(np.random.uniform(1, 1001))  # Random number of output classes (2-100 for classification)
+    num_classes = int(np.random.uniform(500, 1001))  # Random number of output classes (2-100 for classification)
     
-    base_num_filters = int(np.random.uniform(16, 128))  # Base number of filters between 16 and 512
+    base_num_filters = int(np.random.uniform(64, 512))  # Base number of filters between 16 and 512
     
     depth = int(np.random.uniform(1, 30))  # Random depth (number of convolutional layers)
     
@@ -40,9 +40,9 @@ def generate_random_cnn_config():
     # Input size: common image sizes (e.g., 32x32, 128x128, 224x224, etc.)
     # input_size = int(np.random.choice([28, 32, 64, 128, 224, 299, 334, 512, 1024]))
 
-    input_size = int(np.random.uniform(1, 113)) * 2
+    input_size = int(np.random.uniform(16, 113)) * 2
 
-    batch_size = int(np.random.uniform(1, 32)) * 2
+    batch_size = int(np.random.uniform(2, 32)) * 2
 
     return input_channels, num_classes, depth, architecture, base_num_filters, batch_size, input_size, activation, dropout_rate, use_dropout, use_batch_norm
 
