@@ -5,7 +5,7 @@ import numpy as np
 import multiprocessing
 
 # Directory to save the data logs and outputs
-base_data_dir = "/home/ehyo/01-new_approach_dataset_fc/cnn_dataset_step2"
+base_data_dir = "/home/ehyo/01-new_approach_dataset_fc/cnn_dataset_step3"
 os.makedirs(base_data_dir, exist_ok=True)
 
 # Number of random configurations to generate
@@ -22,7 +22,7 @@ def generate_random_cnn_config():
     
     base_num_filters = int(np.random.uniform(64, 512))  # Base number of filters between 16 and 512
     
-    depth = int(np.random.uniform(1, 30))  # Random depth (number of convolutional layers)
+    depth = int(np.random.uniform(15, 30))  # Random depth (number of convolutional layers)
     
     architecture = np.random.choice(['pyramid', 'uniform', 'bottleneck', 'gradual', 'hourglass', 'residual', 'dense'])  # Random architecture type
     

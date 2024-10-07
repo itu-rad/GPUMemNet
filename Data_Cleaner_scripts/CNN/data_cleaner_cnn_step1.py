@@ -28,7 +28,7 @@ def check_for_oom_error(err_file):
 
 
 # Extract model info from the .out file (Torch summary)
-def extract_model_info(out_file):
+def extract_model_info(out_file, batch_size):
     try:
         with open(out_file, 'r') as file:
             lines = file.readlines()
@@ -86,7 +86,7 @@ def extract_model_info(out_file):
 
                     # print(line, activations, params, f"{height}, {width}, {channels}")
 
-                    activations_params.append(('conv2d', activations, params))
+                    activations_params.append(('conv2d', activations * batch_size, params))
                     total_params += params
                     total_activations += activations
                 else:
@@ -107,7 +107,7 @@ def extract_model_info(out_file):
 
                     # print(line, activations, params, f"{height}, {width}, {channels}")
 
-                    activations_params.append(('batchnorm2d', activations, params))
+                    activations_params.append(('batchnorm2d', activations * batch_size, params))
                     total_params += params
                     total_activations += activations
                 else:
@@ -122,7 +122,7 @@ def extract_model_info(out_file):
                     height = int(output_shape[0][1])
                     width = int(output_shape[0][2])
                     activations = channels * height * width
-                    activations_params.append(('dropout', activations, 0))
+                    activations_params.append(('dropout', activations * batch_size, 0))
                     total_activations += activations
 
                     # print(line, activations, params, f"{height}, {width}, {channels}")
@@ -140,7 +140,7 @@ def extract_model_info(out_file):
                 if output_shape:
                     channels = int(output_shape[0][0])
                     activations = channels  # AdaptiveAvgPool2d typically reduces spatial dimensions to 1x1
-                    activations_params.append(('adaptive_avg_pool2d', activations, 0))  # No parameters for pooling
+                    activations_params.append(('adaptive_avg_pool2d', activations * batch_size, 0))  # No parameters for pooling
                     
                     # print(line, activations, 0, f"{height}, {width}, {channels}")
 
@@ -156,7 +156,7 @@ def extract_model_info(out_file):
                 if output_shape and param_count:
                     activations = int(output_shape[0])
                     params = int(param_count[0].replace(',', ''))
-                    activations_params.append(('linear', activations, params))
+                    activations_params.append(('linear', activations * batch_size, params))
 
                     # print(line, activations, params, f"{height}, {width}, {channels}")
 
@@ -171,7 +171,7 @@ def extract_model_info(out_file):
                 output_shape = re.findall(r'\[\-1, (\d+)\]', line)  # Softmax typically has a 1D output
                 if output_shape:
                     activations = int(output_shape[0])
-                    activations_params.append(('softmax', activations, 0))  # Softmax has no trainable parameters
+                    activations_params.append(('softmax', activations * batch_size, 0))  # Softmax has no trainable parameters
                     total_activations += activations
                 else:
                     print(f"Warning: Missing Softmax data in {out_file}, line: {line.strip()}")
@@ -185,7 +185,7 @@ def extract_model_info(out_file):
                     height = int(output_shape[0][1])
                     width = int(output_shape[0][2])
                     activations = channels * height * width
-                    activations_params.append((activation_func, activations, 0))  # No parameters for activation functions
+                    activations_params.append((activation_func, activations * batch_size, 0))  # No parameters for activation functions
                     total_activations += activations
                     activation_functions_list.append(activation_func)
                 else:
@@ -330,8 +330,8 @@ def process_dataset(directories, output_csv):
                         status = check_for_oom_error(err_file_path)  # Check status based on the .err file
 
                         # Extract model info
-                        activations_params, activation_function, depth, total_params, total_activations, input_size_mb, forward_backward_size_mb, params_size_mb, estimated_total_size_mb, layer_counts = extract_model_info(out_file_path)
                         batch_size = extract_batch_size(file)
+                        activations_params, activation_function, depth, total_params, total_activations, input_size_mb, forward_backward_size_mb, params_size_mb, estimated_total_size_mb, layer_counts = extract_model_info(out_file_path, batch_size)
 
                         
                         # Get the corresponding nvsm file
@@ -379,6 +379,6 @@ def process_dataset(directories, output_csv):
                         })
 
 if __name__ == "__main__":
-    dataset_directory = ["../../cnn_dataset_step1", "../../cnn_dataset_step2"]  # Replace with the actual dataset directory path
+    dataset_directory = ["../../cnn_dataset_step1", "../../cnn_dataset_step2", "../../cnn_dataset_step3"]  # Replace with the actual dataset directory path
     output_csv_path = "cnn_data_step1.csv"  # Specify the desired output CSV file
     process_dataset(dataset_directory, output_csv_path)
