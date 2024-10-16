@@ -41,7 +41,7 @@ def train_efficientnet(batch_size, num_epochs=10, learning_rate=0.001, data_dir=
     model.to(device)
 
     # Save model summary to a file
-    summary_path = 'efficientnet.model'
+    summary_path = f'efficientnet_{batch_size}.model'
     with open(summary_path, 'w') as f:
         # Redirect the stdout to capture the summary output
         with redirect_stdout(f):

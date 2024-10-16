@@ -41,7 +41,7 @@ def train_vgg(batch_size, num_epochs=10, learning_rate=0.001, data_dir='/raid/da
     model.to(device)
 
     # Save model summary to a file
-    summary_path = 'vgg.model'
+    summary_path = f'vgg_{batch_size}.model'
     with open(summary_path, 'w') as f:
         # Redirect the stdout to capture the summary output
         with redirect_stdout(f):

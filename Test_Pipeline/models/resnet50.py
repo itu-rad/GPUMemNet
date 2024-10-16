@@ -42,7 +42,7 @@ def train_resnet50(batch_size, num_epochs=10, learning_rate=0.001, data_dir='/ra
     model.to(device)
 
     # Save model summary to a file
-    summary_path = 'resnet50.model'
+    summary_path = f'resnet50_{batch_size}.model'
     with open(summary_path, 'w') as f:
         # Redirect the stdout to capture the summary output
         with redirect_stdout(f):

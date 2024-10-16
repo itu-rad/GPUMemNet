@@ -34,7 +34,7 @@ def train_inception(batch_size, num_epochs=10, learning_rate=0.001, data_dir='/r
     model.to(device)
 
     # Capture and save model summary
-    summary_path = 'inceptionv3.model'
+    summary_path = f'inceptionv3_{batch_size}.model'
     with open(summary_path, 'w') as f:
         buffer = io.StringIO()
         with redirect_stdout(buffer):
