@@ -148,11 +148,13 @@ def extract_transformer_model_info(summary, batch_size, sequence_length):
         elif 'LayerNorm' in line:
             layer_counts['LayerNorm'] += 1
             activations_params.append(('LayerNorm', current_activations, 0))  # No params for LayerNorm
+            total_activations += current_activations
             depth += 1
 
         elif 'Dropout' in line:
             layer_counts['Dropout'] += 1
             activations_params.append(('Dropout', current_activations, 0))  # No params for Dropout
+            total_activations += current_activations
             depth += 1
 
     return {
