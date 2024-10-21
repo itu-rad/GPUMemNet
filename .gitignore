@@ -9,4 +9,4 @@ screenlog-CNN-step1.0
 screenlog-CNN-step2.0
 transformer_dataset_step1
 Test_Pipeline/__pycache__/
-Estimator_Transformer/01-Transformer_estimates_for_CNNs
+Estimator_Transformer/01-Transformer_estimates_for_CNNs/lightning_logs
