@@ -11,16 +11,16 @@ import numpy as np
 
 import requests
 
-url = "https://www.dropbox.com/scl/fi/x2eh2yil56rgu5id1fwbm/cnn_data1.csv?rlkey=7bltxkitlwdnuirw08r2ysuv4&st=wmmcg5by&dl=1"
+url = "https://www.dropbox.com/scl/fi/wunq5wdku07gi8rr8psvj/cnn_data_new_approach.csv?rlkey=pj4oiy3afjqcyuvr1mmq40tbn&st=vrglltzl&dl=1"
 
 response = requests.get(url)
 
 # Save the file locally
-with open('cnn_data1.csv', 'wb') as file:
+with open('cnn_data_new_approach.csv', 'wb') as file:
     file.write(response.content)
 
 
-csv_file_path = "cnn_data1.csv"  # Replace with the actual path to the produced CSV file
+csv_file_path = "cnn_data_new_approach.csv"  # Replace with the actual path to the produced CSV file
 
 # Load the CSV into a DataFrame and assign it to the desired column names
 df = pd.read_csv(csv_file_path)
@@ -181,12 +181,12 @@ def encode_layer_cnn(layer_type):
 def process_sequence(sequence):
     processed_sequence = []
     for entry in eval(sequence):  # Evaluate string as list of tuples
-        layer_type, feature_1, feature_2 = entry
+        layer_type, feature_1, feature_2, feature_3, feature_4, feature5 = entry
         # for fc
         # encoded_layer = encode_layer(layer_type)
         # for cnn
         encoded_layer = encode_layer_cnn(layer_type)
-        combined = encoded_layer + [feature_1, feature_2]
+        combined = encoded_layer + [feature_1, feature_2, feature_3, feature_4, feature5]
         processed_sequence.append(combined)
     return np.array(processed_sequence)
 
@@ -256,11 +256,10 @@ class TransformerClassifier(nn.Module):
         super(TransformerClassifier, self).__init__()
         self.d_model = d_model
         self.embedding = nn.Sequential(nn.Linear(num_features, d_model),  # Embedding layer for input features
-                                        # nn.LayerNorm(d_model),
-                                       nn.BatchNorm1d(max_seq_len),
+                                       nn.LayerNorm(d_model),
                                        nn.ReLU(),
                                        nn.Linear(d_model, d_model),
-                                       nn.BatchNorm1d(max_seq_len),
+                                       nn.LayerNorm(d_model),
                                        nn.ReLU(),
                                        )
         # Positional Encoding
@@ -326,17 +325,17 @@ class TransformerClassifier(nn.Module):
     
 
 
-num_of_head = 4
-num_of_layers = 12
+num_of_head = 1
+num_of_layers = 5
 
-dimensionality_of_embeddings = 64
-dim_ff = 128
+dimensionality_of_embeddings = 6
+dim_ff = 8
 
 class classification_gpu_usage(pl.LightningModule):
     def __init__(self, output_size):
         super(classification_gpu_usage, self).__init__()
         # Define your model
-        self.model = TransformerClassifier(num_features=4, num_classes=len(labels), 
+        self.model = TransformerClassifier(num_features=7, num_classes=len(labels), 
                                            d_model=dimensionality_of_embeddings, nhead=num_of_head, 
                                            num_layers=num_of_layers, dim_feedforward=dim_ff, 
                                            dropout=0, max_seq_len=max_layer)
