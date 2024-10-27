@@ -4,7 +4,7 @@ import argparse
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
 import numpy as np
-from torchsummary import summary
+from torchinfo  import summary
 import time
 import math
 import numpy as np
@@ -326,7 +326,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train a configurable CNN with different architectures on a dummy dataset.')
     parser.add_argument('--depth', type=int, default=10, help='Depth of the CNN (number of convolutional layers)')
     parser.add_argument('--batch_size', type=int, default=32, help='Batch size for training')
-    parser.add_argument('--input_size', type=int, nargs=2, default=[224, 224], help='Input size as (height, width) tuple')
+    parser.add_argument('--input_size', type=int, nargs=2, default=[112, 112], help='Input size as (height, width) tuple')
     parser.add_argument('--channels', type=int, default=3, help='Channels of input image')
     parser.add_argument('--num_classes', type=int, default=100, help='Number of classes (output size)')
     parser.add_argument('--architecture', type=str, choices=['pyramid', 'reverse_pyramid', 'uniform', 'bottleneck', 'gradual', 'hourglass', 'residual', 'dense'], default='pyramid', help='Architecture type for the CNN')
@@ -355,8 +355,9 @@ if __name__ == '__main__':
     # Move the model to the correct device (cuda or cpu)
     model = model.to(device)
 
+    print(args.input_size)
     # Display the model summary
-    summary(model, input_size=(args.channels, *input_size_tuple), device=device)
+    summary(model, input_size=(args.batch_size, args.channels, args.input_size[0], args.input_size[1]))
 
     # Train the model using the parameters from argparse
     train_model(model, input_shape=(args.channels, *input_size_tuple), 

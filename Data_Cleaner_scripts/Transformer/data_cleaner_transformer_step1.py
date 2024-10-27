@@ -254,7 +254,7 @@ def process_dataset(directories, output_csv):
                         })
 
 if __name__ == "__main__":
-    dataset_directories = ["../../transformer_dataset_step1"]  # Replace with actual dataset directories
+    dataset_directories = ["../../transformer_dataset_step1", "../../transformer_dataset_step2"]  # Replace with actual dataset directories
     output_csv_path = "transformer_data.csv"  # Output CSV file
     
     process_dataset(dataset_directories, output_csv_path)

@@ -4,7 +4,7 @@ import time
 import numpy as np
 
 # Directory to save the data logs and outputs
-base_data_dir = "/home/ehyo/01-new_approach_dataset_fc/transformer_dataset_step1"
+base_data_dir = "/home/ehyo/01-new_approach_dataset_fc/transformer_dataset_step2"
 os.makedirs(base_data_dir, exist_ok=True)
 
 # Number of random configurations to generate
@@ -16,13 +16,13 @@ np.random.seed(99)
 # Function to generate random Transformer parameters
 def generate_random_transformer_config():
     # Choose a number of classes between 2 and 1000, which is a reasonable range for classification tasks.
-    num_classes = int(np.random.uniform(2, 1001))  
+    num_classes = int(np.random.uniform(400, 1001))  
     
     # Base embedding size should typically be in the range [128, 1024] for most transformer architectures.
-    embedding_size = int(np.random.choice([128, 256, 512, 768, 1024]))  
+    embedding_size = int(np.random.choice([128, 256, 512, 768, 1024, 2048]))  
     
     # Number of transformer layers: reasonable values range from 2 to 12 for small to medium models.
-    num_layers = int(np.random.uniform(2, 13))  
+    num_layers = int(np.random.uniform(2, 40))  
     
     # Number of attention heads: usually a divisor of the embedding size, typically ranging from 2 to 16.
     num_heads = int(np.random.choice([2, 4, 8, 12, 16]))  
@@ -34,7 +34,7 @@ def generate_random_transformer_config():
     dropout_rate = np.random.uniform(0.1, 0.5)  
     
     # Sequence length: typical values for transformers are 128, 256, or 512. We keep it within a sensible range.
-    seq_length = int(np.random.choice([128, 256, 512]))  
+    seq_length = int(np.random.choice([128, 256, 512, 1024]))  
     
     # Input size for vocabulary: using a vocabulary size between 50,000 and 1,000,000 is common for transformer models.
     input_size = int(np.random.uniform(50000, 1000000))  
@@ -43,7 +43,7 @@ def generate_random_transformer_config():
     num_samples = int(np.random.uniform(1000, 5001))  
     
     # Randomly generate batch size (8 to 64) as a common practice to balance memory usage and training speed.
-    batch_size = int(np.random.choice([8, 16, 32, 64]))  
+    batch_size = int(np.random.choice([1, 2, 4, 8, 16, 32, 64, 128]))  
     
     return num_classes, embedding_size, num_layers, num_heads, ff_hidden_size, dropout_rate, seq_length, input_size, num_samples, batch_size
 

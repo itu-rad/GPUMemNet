@@ -3,6 +3,47 @@ import re
 import csv
 from collections import Counter
 
+
+# Function to extract parameters from the filename based on the new pattern
+def extract_params_from_filename_v2(filename):
+    params = {}
+
+    # Remove the '.out' suffix
+    filename_base = filename.replace('.out', '')
+
+    # Define regex patterns for each feature to match 'feature_name:value'
+    patterns = {
+        'input_channels': r'input_channels:(\d+)',
+        'num_classes': r'num_classes:(\d+)',
+        'depth': r'depth:(\d+)',
+        'arch': r'arch:([^\_]+)',  # Architecture names can contain letters but no underscores
+        'base_filters': r'base_filters:(\d+)',
+        'batch': r'batch:(\d+)',
+        'input_size': r'input_size:(\d+)',
+        'act': r'act:([\w]+)',  # Activation function names can contain letters
+        'dropout_rate': r'dropout:([\d\.]+)',  # Handling float numbers for dropout rate
+        'use_dropout': r'dropout:(True|False)',  # Extract boolean values for dropout
+        'batchnorm': r'batchnorm:(True|False)',  # Extract boolean values for batch normalization
+    }
+
+    # Iterate through patterns and apply them to extract values
+    for key, pattern in patterns.items():
+        match = re.search(pattern, filename_base)
+        if match:
+            # Convert matched values to appropriate type
+            if key == 'dropout_rate':  # Handle float conversion for dropout rate
+                params[key] = float(match.group(1))
+            elif key == 'use_dropout' or key == 'batchnorm':  # Handle boolean conversion
+                params[key] = match.group(1) == 'True'
+            else:
+                params[key] = int(match.group(1)) if match.group(1).isdigit() else match.group(1)
+        else:
+            print(f"Warning: {key} not found in filename: {filename}")
+
+    return params
+
+
+
 def most_frequent_activation_function(activation_functions):
     # Count the occurrences of each activation function
     activation_counter = Counter(activation_functions)
@@ -94,6 +135,7 @@ def extract_model_info(out_file, batch_size):
 
             # Handle BatchNorm2d layers
             elif "BatchNorm2d-" in line:
+                depth += 1
                 layer_counts['batchnorm2d'] += 1
                 output_shape = re.findall(r'\[\-1, (\d+), (\d+), (\d+)\]', line)
                 param_count = re.findall(r'(\d{1,3}(?:,\d{3})*)$', line)
@@ -115,6 +157,7 @@ def extract_model_info(out_file, batch_size):
 
             # Handle Dropout layers
             elif "Dropout-" in line:
+                depth += 1
                 layer_counts['dropout'] += 1
                 output_shape = re.findall(r'\[\-1, (\d+), (\d+), (\d+)\]', line)
                 if output_shape:
@@ -131,6 +174,7 @@ def extract_model_info(out_file, batch_size):
 
             # Handle AdaptiveAvgPool2d layers, including small output shapes like [1,1]
             elif "AdaptiveAvgPool2d-" in line:
+                depth += 1
                 layer_counts['adaptive_avg_pool2d'] += 1
                 output_shape = re.findall(r'\[\-1, (\d+), (\d+), (\d+)\]', line)  # Typical shape
                 if not output_shape:
@@ -150,6 +194,7 @@ def extract_model_info(out_file, batch_size):
 
             # Handle Linear layers
             elif "Linear-" in line:
+                depth += 1
                 layer_counts['linear'] += 1
                 output_shape = re.findall(r'\[\-1, (\d+)\]', line)
                 param_count = re.findall(r'(\d{1,3}(?:,\d{3})*)$', line)
@@ -167,6 +212,7 @@ def extract_model_info(out_file, batch_size):
 
             # Handle Softmax layers
             elif "Softmax-" in line:
+                depth += 1
                 layer_counts['softmax'] += 1
                 output_shape = re.findall(r'\[\-1, (\d+)\]', line)  # Softmax typically has a 1D output
                 if output_shape:
@@ -178,6 +224,7 @@ def extract_model_info(out_file, batch_size):
 
             # Dynamically handle activation functions by identifying any name with common patterns
             elif re.search(r'(ReLU|LeakyReLU|PReLU|ELU|SELU|GELU|Tanh|SiLU|Softplus|Mish)-\d+', line):
+                depth += 1
                 activation_func = re.findall(r'(ReLU|LeakyReLU|PReLU|ELU|SELU|GELU|Tanh|SiLU|Softplus|Mish)-\d+', line)[0]
                 output_shape = re.findall(r'\[\-1, (\d+), (\d+), (\d+)\]', line)
                 if output_shape:
@@ -315,7 +362,7 @@ def process_dataset(directories, output_csv):
         fieldnames = ['Filename', 'Depth', 'Activations-Params', 'Activation Function', 'Total Activations', 'Total Parameters', 'Batch Size', 
                       'Max GPU Memory (MiB)', 'Avg GPUTL', 'Avg GRACT', 'Avg SMACT', 'Avg SMOCC', 'Avg FP32A', 
                       'Conv2d Count', 'BatchNorm2d Count', 'Dropout Count', 'AdaptiveAvgPool2d Count', 'Linear Count', 'Status', 'Input Size (MB)', 
-                      'Forward/Backward Pass Size (MB)', 'Params Size (MB)', 'Estimated Total Size (MB)']
+                      'Forward/Backward Pass Size (MB)', 'Params Size (MB)', 'Estimated Total Size (MB)', 'architecture']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
 
@@ -324,6 +371,11 @@ def process_dataset(directories, output_csv):
                 for file in files:
                     if file.endswith('.out'):
                         out_file_path = os.path.join(root, file)
+
+                        # get the architecture 
+                        architecture = extract_params_from_filename_v2(out_file_path)['arch']
+
+                        # print(architecture)
 
                         # Check for corresponding .err file
                         err_file_path = out_file_path.replace('.out', '.err')
@@ -375,7 +427,8 @@ def process_dataset(directories, output_csv):
                             'Input Size (MB)': input_size_mb * batch_size,
                             'Forward/Backward Pass Size (MB)': forward_backward_size_mb * batch_size,
                             'Params Size (MB)': params_size_mb,
-                            'Estimated Total Size (MB)': (forward_backward_size_mb + input_size_mb) * batch_size + params_size_mb
+                            'Estimated Total Size (MB)': (forward_backward_size_mb + input_size_mb) * batch_size + params_size_mb,
+                            'architecture': architecture
                         })
 
 if __name__ == "__main__":
