@@ -56,7 +56,7 @@ def extract_transformer_model_info(summary, batch_size, sequence_length):
     layer_counts = defaultdict(int)
 
     # Initial number of activations is based on the sequence length and batch size
-    current_activations = sequence_length * batch_size
+    current_activations = sequence_length
 
     # Regex patterns for extracting layers and parameters
     embedding_pattern = r'Embedding\((\d+), (\d+)\),\s*([\d,]+)\s*params'
@@ -74,14 +74,14 @@ def extract_transformer_model_info(summary, batch_size, sequence_length):
             accumulated_params += params  # Accumulate over the transformer layers
 
             # Calculate the number of activations for the embedding layer
-            current_activations = sequence_length * batch_size * int(embedding_dim)
+            current_activations = sequence_length * int(embedding_dim)
 
             # Calculate memory required for activations in bytes (assuming 4 bytes per activation for float32)
             memory_for_activations = current_activations * 4
             gpu_memory_for_activations += memory_for_activations
 
             # Append the layer and its activations to the list
-            activations_params.append(('Embedding', current_activations, params))
+            activations_params.append(('Embedding', current_activations * batch_size , params))
             total_activations += current_activations
 
             # Increment layer count
@@ -102,14 +102,14 @@ def extract_transformer_model_info(summary, batch_size, sequence_length):
             activation_match = re.search(activations_pattern, line)
             if activation_match:
                 in_features, out_features = map(int, activation_match.groups())
-                current_activations = out_features * batch_size  # Update the activations
+                current_activations = out_features   # Update the activations
 
                 # Calculate memory required for activations in bytes (assuming 4 bytes per activation for float32)
                 memory_for_activations = current_activations * 4
                 gpu_memory_for_activations += memory_for_activations
 
             # Append the layer and its activations to the list
-            activations_params.append(('NonDynamicallyQuantizableLinear', current_activations, params))
+            activations_params.append(('NonDynamicallyQuantizableLinear', current_activations * batch_size, params))
             total_activations += current_activations
 
             # Increment layer count
@@ -130,14 +130,14 @@ def extract_transformer_model_info(summary, batch_size, sequence_length):
             activation_match = re.search(activations_pattern, line)
             if activation_match:
                 in_features, out_features = map(int, activation_match.groups())
-                current_activations = out_features * batch_size  # Update the activations
+                current_activations = out_features   # Update the activations
 
                 # Calculate memory required for activations in bytes (assuming 4 bytes per activation for float32)
                 memory_for_activations = current_activations * 4
                 gpu_memory_for_activations += memory_for_activations
 
             # Append the layer and its activations to the list
-            activations_params.append(('Linear', current_activations, params))
+            activations_params.append(('Linear', current_activations * batch_size, params))
             total_activations += current_activations
 
             # Increment layer count
