@@ -26,6 +26,10 @@ activation_to_encoding = {activation: positional_encodings[i] for i, activation 
 
 # Function to get the encoding for a given activation function
 def get_activation_encoding(activation):
+
+    if activation == "ReLU6":
+        activation = "ReLU"
+
     return activation_to_encoding[activation]
 
 
@@ -81,8 +85,24 @@ def extract_model_info(out_file, batch_size):
         temp = 0
         for line in lines:
             # Skip 'Block' lines
+            if "SqueezeExcitation" in line:
+                continue
+
+            if "MBConv" in line:
+                continue
+
             if "Block" in line:
                 continue
+            
+            if "SeparableConv2d" in line:
+                continue
+
+            if "InvertedResidual" in line:
+                continue
+
+            if "BasicConv2d" in line:
+                continue
+
 
             # Handle Conv2d layers
             if "Conv2d-" in line:
@@ -186,8 +206,8 @@ def extract_model_info(out_file, batch_size):
                     print(f"Warning: Missing Softmax data in {out_file}, line: {line.strip()}")
 
             # Handle Activation Functions (e.g., ReLU, LeakyReLU) with both 2D and 4D output shapes
-            elif re.search(r'(ReLU|LeakyReLU|PReLU|ELU|SELU|GELU|Tanh|SiLU|Softplus|Mish)-\d+', line):
-                activation_func = re.findall(r'(ReLU|LeakyReLU|PReLU|ELU|SELU|GELU|Tanh|SiLU|Softplus|Mish)-\d+', line)[0]
+            elif re.search(r'(ReLU6|ReLU|LeakyReLU|PReLU|ELU|SELU|GELU|Tanh|SiLU|Softplus|Mish)-\d+', line):
+                activation_func = re.findall(r'(ReLU6|ReLU|LeakyReLU|PReLU|ELU|SELU|GELU|Tanh|SiLU|Softplus|Mish)-\d+', line)[0]
                 
                 # Try to match both 4D and 2D output shapes
                 output_shape_4d = re.findall(r'\[\-?\d*, (\d+), (\d+), (\d+)\]', line)
@@ -231,7 +251,11 @@ def extract_model_info(out_file, batch_size):
         if temp != total_params:
             raise ValueError("Mismatch between total params in summary and parsed params.")
 
-        activation_function = most_frequent_activation_function(activation_functions_list)
+
+        if len(activation_functions_list) > 0:
+            activation_function = most_frequent_activation_function(activation_functions_list)
+        else:
+            activation_function = "ReLU"
 
         return activations_params, activation_function, depth, total_params, total_activations, input_size_mb, forward_backward_size_mb, params_size_mb, estimated_total_size_mb, layer_counts
 
