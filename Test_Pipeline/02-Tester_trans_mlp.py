@@ -374,7 +374,7 @@ def prepare_features_for_model(features, batch_size):
 
 # Usage example
 if __name__ == "__main__":
-    directory = 'cnn_models'  # Specify the directory containing .model files
-    model_file = 'estimator/cnn_mlp_8g.ckpt'  # Specify the path to the pickled model
+    directory = 'trans_models'  # Specify the directory containing .model files
+    model_file = 'estimator/XXX'  # Specify the path to the pickled model
     
     process_model_files(directory, model_file)

@@ -1,0 +1,356 @@
+XLNetForSequenceClassification(
+  (transformer): XLNetModel(
+    (word_embedding): Embedding(32000, 1024), 32,768,000 params
+    (layer): ModuleList(
+      (0): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (1): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (2): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (3): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (4): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (5): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (6): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (7): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (8): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (9): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (10): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (11): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (12): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (13): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (14): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (15): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (16): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (17): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (18): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (19): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (20): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (21): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (22): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+      (23): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 5,250,048 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+          (layer_1): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+          (layer_2): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 8,395,776 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 13,645,824 params
+    ), 327,499,776 params
+    (dropout): Dropout(p=0.1, inplace=False), 0 params
+  ), 360,268,800 params
+  (sequence_summary): SequenceSummary(
+    (summary): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+    (activation): Tanh(), 0 params
+    (first_dropout): Identity(), 0 params
+    (last_dropout): Dropout(p=0.1, inplace=False), 0 params
+  ), 1,049,600 params
+  (logits_proj): Linear(in_features=1024, out_features=2, bias=True), 2,050 params
+), 361,320,450 params
+=======================================================================
+Total params: 235,367,426
+Trainable params: 235,367,426
+Non-trainable params: 0
+-----------------------------------------------------------------------
