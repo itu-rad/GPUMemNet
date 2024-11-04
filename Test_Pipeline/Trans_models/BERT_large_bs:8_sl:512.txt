@@ -1,0 +1,606 @@
+BertForMaskedLM(
+  (bert): BertModel(
+    (embeddings): BertEmbeddings(
+      (word_embeddings): Embedding(28996, 1024, padding_idx=0), 29,691,904 params
+      (position_embeddings): Embedding(512, 1024), 524,288 params
+      (token_type_embeddings): Embedding(2, 1024), 2,048 params
+      (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+      (dropout): Dropout(p=0.1, inplace=False), 0 params
+    ), 30,220,288 params
+    (encoder): BertEncoder(
+      (layer): ModuleList(
+        (0): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (1): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (2): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (3): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (4): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (5): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (6): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (7): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (8): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (9): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (10): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (11): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (12): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (13): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (14): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (15): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (16): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (17): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (18): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (19): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (20): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (21): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (22): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+        (23): BertLayer(
+          (attention): BertAttention(
+            (self): BertSdpaSelfAttention(
+              (query): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (key): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (value): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 3,148,800 params
+            (output): BertSelfOutput(
+              (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+              (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+              (dropout): Dropout(p=0.1, inplace=False), 0 params
+            ), 1,051,648 params
+          ), 4,200,448 params
+          (intermediate): BertIntermediate(
+            (dense): Linear(in_features=1024, out_features=4096, bias=True), 4,198,400 params
+            (intermediate_act_fn): GELUActivation(), 0 params
+          ), 4,198,400 params
+          (output): BertOutput(
+            (dense): Linear(in_features=4096, out_features=1024, bias=True), 4,195,328 params
+            (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+            (dropout): Dropout(p=0.1, inplace=False), 0 params
+          ), 4,197,376 params
+        ), 12,596,224 params
+      ), 302,309,376 params
+    ), 302,309,376 params
+  ), 332,529,664 params
+  (cls): BertOnlyMLMHead(
+    (predictions): BertLMPredictionHead(
+      (transform): BertPredictionHeadTransform(
+        (dense): Linear(in_features=1024, out_features=1024, bias=True), 1,049,600 params
+        (transform_act_fn): GELUActivation(), 0 params
+        (LayerNorm): LayerNorm((1024,), eps=1e-12, elementwise_affine=True), 2,048 params
+      ), 1,051,648 params
+      (decoder): Linear(in_features=1024, out_features=28996, bias=True), 29,720,900 params
+    ), 30,801,544 params
+  ), 30,801,544 params
+), 363,331,208 params
+=======================================================================
+Total params: 363,331,208
+Trainable params: 363,302,212
+Non-trainable params: 28,996
+-----------------------------------------------------------------------

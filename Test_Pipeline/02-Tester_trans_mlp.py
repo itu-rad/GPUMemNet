@@ -5,271 +5,140 @@ import numpy as np
 from collections import Counter
 
 import torch 
-from CNN_MLPredictor import classification_gpu_usage
 
-# activation function preparation
-# List of activation functions and their positional encodings
-print("the activation function are positionally encoded safely")
-activations = ['ELU', 'GELU', 'LeakyReLU', 'Mish', 'PReLU', 'ReLU', 'SELU', 'SiLU', 'Softplus', 'Tanh']
+from Trans_MLPredictor import classification_gpu_usage
 
-# Positional encoding function (already defined in your code)
-def positional_encoding_2d(num_states):
-    positions = []
-    for i in range(num_states):
-        position = (np.sin(i * np.pi / num_states), np.cos(i * np.pi / num_states))
-        positions.append(position)
-    return np.array(positions)
-
-# Generate positional encodings
-positional_encodings = positional_encoding_2d(len(activations))
-activation_to_encoding = {activation: positional_encodings[i] for i, activation in enumerate(activations)}
-
-# Function to get the encoding for a given activation function
-def get_activation_encoding(activation):
-
-    if activation == "ReLU6":
-        activation = "ReLU"
-
-    return activation_to_encoding[activation]
+from collections import defaultdict
 
 
-def most_frequent_activation_function(activation_functions):
-    # Count the occurrences of each activation function
-    activation_counter = Counter(activation_functions)
-    
-    # Find the activation function with the highest count
-    # most_common_activation, count = activation_counter.most_common(1)[0]
-    most_common_activation, _ = activation_counter.most_common(1)[0]
-    
-    return most_common_activation
+def get_batchsize_and_sequrenceLength(input_string):
+    batch_size_match = re.search(r'bs:(\d+)', input_string)
+    sequence_length_match = re.search(r'sl:(\d+)', input_string)
+
+    batch_size = int(batch_size_match.group(1)) if batch_size_match else None
+    sequence_length = int(sequence_length_match.group(1)) if sequence_length_match else None
+
+    return batch_size, sequence_length
 
 
-
-def extract_model_info(out_file, batch_size):
-    try:
-        with open(out_file, 'r') as file:
+def extract_model_info(file_path, batch_size, sequence_length):
+    with open(file_path, 'r') as file:
             lines = file.readlines()
 
-        if not lines:  # If the file is empty
-            return [], 'None', 0, 0, 0, 0.0, 0.0, 0.0, 0.0, {
-                'conv2d': 0,
-                'batchnorm2d': 0,
-                'dropout': 0,
-                'adaptive_avg_pool2d': 0,
-                'linear': 0,
-                'softmax': 0
-            }
 
-        activations_params = []
-        activation_functions_list = []
-        total_params = 0
-        total_activations = 0
-        depth = 0  # Counting Conv2d layers
+    # if not summary.strip():  # Check if the summary is empty
+    #     return None
 
-        # Initialize memory size variables
-        input_size_mb = 0.0
-        forward_backward_size_mb = 0.0
-        params_size_mb = 0.0
-        estimated_total_size_mb = 0.0
+    # lines = summary.split('\n')
 
-        # Dictionary to keep track of the count of each layer type
-        layer_counts = {
-            'conv2d': 0,
-            'batchnorm2d': 0,
-            'dropout': 0,
-            'adaptive_avg_pool2d': 0,
-            'linear': 0,
-            'softmax': 0
-        }
+    activations_params = []
+    total_params = 0
+    total_activations = 0
+    accumulated_params = 0  # Accumulated parameters over transformer layers
+    depth = 0  # Count of layers
 
-        temp = 0
-        for line in lines:
-            # Skip 'Block' lines
-            if "SqueezeExcitation" in line:
-                continue
+    # Dictionary to keep track of the count of each layer type
+    layer_counts = defaultdict(int)
 
-            if "MBConv" in line:
-                continue
+    # Initial number of activations is based on the sequence length and batch size
+    current_activations = sequence_length
 
-            if "Block" in line:
-                continue
-            
-            if "SeparableConv2d" in line:
-                continue
+    # Regex patterns for extracting layers and parameters
+    embedding_pattern = r'Embedding\((\d+), (\d+)\),\s*([\d,]+)\s*params'
+    linear_pattern = r'Linear\(.*?\),\s*([\d,]+)\s*params'
+    non_dynamically_linear_pattern = r'NonDynamicallyQuantizableLinear\(.*?\),\s*([\d,]+)\s*params'
+    activations_pattern = r'in_features=(\d+),\s*out_features=(\d+)'
 
-            if "InvertedResidual" in line:
-                continue
+    for line in lines:
+        # First check for Embedding layer
+        embedding_match = re.search(embedding_pattern, line)
+        if embedding_match:
+            vocab_size, embedding_dim, params = embedding_match.groups()
+            params = int(params.replace(',', ''))  # Remove commas and convert to int
+            total_params += params
+            accumulated_params += params  # Accumulate over the transformer layers
 
-            if "BasicConv2d" in line:
-                continue
+            # Calculate the number of activations for the embedding layer
+            current_activations = sequence_length * int(embedding_dim)
 
+            # Append the layer and its activations to the list
+            activations_params.append(('Embedding', current_activations * batch_size , params))
+            total_activations += current_activations
 
-            # Handle Conv2d layers
-            if "Conv2d-" in line:
-                depth += 1
-                layer_counts['conv2d'] += 1
-                output_shape = re.findall(r'\[\-?\d*, (\d+), (\d+), (\d+)\]', line)
-                param_count = re.findall(r'(\d{1,3}(?:,\d{3})*)$', line)
-                if output_shape and param_count:
-                    channels = int(output_shape[0][0])
-                    height = int(output_shape[0][1])
-                    width = int(output_shape[0][2])
-                    activations = channels * height * width
-                    params = int(param_count[0].replace(',', ''))
+            # Increment layer count
+            layer_counts['Embedding'] += 1
+            depth += 1
 
-                    activations_params.append(('conv2d', activations * batch_size, params))
-                    total_params += params
-                    total_activations += activations
-                else:
-                    print(f"Warning: Missing Conv2d data in {out_file}, line: {line.strip()}")
+            # Skip further checks for this line since it's already processed
+            continue
 
-            # Handle BatchNorm2d layers
-            elif "BatchNorm2d-" in line:
-                layer_counts['batchnorm2d'] += 1
-                output_shape = re.findall(r'\[\-?\d*, (\d+), (\d+), (\d+)\]', line)
-                param_count = re.findall(r'(\d{1,3}(?:,\d{3})*)$', line)
+        # Now check for NonDynamicallyQuantizableLinear
+        non_dyn_linear_match = re.search(non_dynamically_linear_pattern, line)
+        if non_dyn_linear_match:
+            params = int(non_dyn_linear_match.group(1).replace(',', ''))
+            total_params += params
+            accumulated_params += params  # Accumulate over the transformer layers
 
-                if output_shape and param_count:
-                    channels = int(output_shape[0][0])
-                    height = int(output_shape[0][1])
-                    width = int(output_shape[0][2])
-                    activations = channels * height * width
-                    params = int(param_count[0].replace(',', ''))
-
-                    activations_params.append(('batchnorm2d', activations * batch_size, params))
-                    total_params += params
-                    total_activations += activations
-                else:
-                    print(f"Warning: Missing BatchNorm2d data in {out_file}, line: {line.strip()}")
-
-            # Handle Dropout layers (4D and 2D)
-            elif "Dropout-" in line:
-                layer_counts['dropout'] += 1
-                output_shape_4d = re.findall(r'\[\-?\d*, (\d+), (\d+), (\d+)\]', line)
-                output_shape_2d = re.findall(r'\[\-?\d*, (\d+)\]', line)
-                
-                if output_shape_4d:
-                    channels = int(output_shape_4d[0][0])
-                    height = int(output_shape_4d[0][1])
-                    width = int(output_shape_4d[0][2])
-                    activations = channels * height * width
-                    activations_params.append(('dropout', activations * batch_size, 0))
-                    total_activations += activations
-
-                elif output_shape_2d:
-                    activations = int(output_shape_2d[0][0])
-                    activations_params.append(('dropout', activations * batch_size, 0))
-                    total_activations += activations
-
-                else:
-                    print(f"Warning: Missing Dropout data in {out_file}, line: {line.strip()}")
-
-            # Handle AdaptiveAvgPool2d layers
-            elif "AdaptiveAvgPool2d-" in line:
-                layer_counts['adaptive_avg_pool2d'] += 1
-                output_shape = re.findall(r'\[\-?\d*, (\d+), (\d+), (\d+)\]', line)
-                if not output_shape:
-                    output_shape = re.findall(r'\[\-?\d*, (\d+), (\d+)\]', line)  # Fallback for shapes like [C, 1, 1]
-                if not output_shape:
-                    output_shape = re.findall(r'\[\-?\d*, (\d+)\]', line)  # Fallback for shapes like [C]
-                if output_shape:
-                    channels = int(output_shape[0][0])
-                    activations = channels  # AdaptiveAvgPool2d typically reduces spatial dimensions to 1x1
-                    activations_params.append(('adaptive_avg_pool2d', activations * batch_size, 0))
-                    total_activations += activations
-                else:
-                    print(f"Warning: Missing AdaptiveAvgPool2d data in {out_file}, line: {line.strip()}")
-
-            # Handle Linear layers
-            elif "Linear-" in line:
-                layer_counts['linear'] += 1
-                output_shape = re.findall(r'\[\-?\d*, (\d+)\]', line)
-                param_count = re.findall(r'(\d{1,3}(?:,\d{3})*)$', line)
-                if output_shape and param_count:
-                    activations = int(output_shape[0])
-                    params = int(param_count[0].replace(',', ''))
-                    activations_params.append(('linear', activations * batch_size, params))
-                    total_params += params
-                    total_activations += activations
-                else:
-                    print(f"Warning: Missing Linear data in {out_file}, line: {line.strip()}")
-
-            # Handle Softmax layers
-            elif "Softmax-" in line:
-                layer_counts['softmax'] += 1
-                output_shape = re.findall(r'\[\-?\d*, (\d+)\]', line)  # Softmax typically has a 1D output
-                if output_shape:
-                    activations = int(output_shape[0])
-                    activations_params.append(('softmax', activations * batch_size, 0))
-                    total_activations += activations
-                else:
-                    print(f"Warning: Missing Softmax data in {out_file}, line: {line.strip()}")
-
-            # Handle Activation Functions (e.g., ReLU, LeakyReLU) with both 2D and 4D output shapes
-            elif re.search(r'(ReLU6|ReLU|LeakyReLU|PReLU|ELU|SELU|GELU|Tanh|SiLU|Softplus|Mish)-\d+', line):
-                activation_func = re.findall(r'(ReLU6|ReLU|LeakyReLU|PReLU|ELU|SELU|GELU|Tanh|SiLU|Softplus|Mish)-\d+', line)[0]
-                
-                # Try to match both 4D and 2D output shapes
-                output_shape_4d = re.findall(r'\[\-?\d*, (\d+), (\d+), (\d+)\]', line)
-                output_shape_2d = re.findall(r'\[\-?\d*, (\d+)\]', line)
-                
-                if output_shape_4d:
-                    channels = int(output_shape_4d[0][0])
-                    height = int(output_shape_4d[0][1])
-                    width = int(output_shape_4d[0][2])
-                    activations = channels * height * width
-                    activations_params.append((activation_func, activations * batch_size, 0))  # No parameters for activation functions
-                    total_activations += activations
-                    activation_functions_list.append(activation_func)
-
-                elif output_shape_2d:
-                    activations = int(output_shape_2d[0][0])
-                    activations_params.append((activation_func, activations * batch_size, 0))  # No parameters for activation functions
-                    total_activations += activations
-                    activation_functions_list.append(activation_func)
-
-                else:
-                    print(f"Warning: Missing activation data for {activation_func} in {out_file}, line: {line.strip()}")
-
-            # Handling Total params:
-            if "Total params:" in line:
-                temp = re.findall(r'Total params:\s*([\d,]+)', line)
-                if temp:
-                    temp = int(temp[0].replace(',', ''))
-
-            # Handling input and memory sizes
-            if "Input size (MB):" in line:
-                input_size_mb = float(re.findall(r'Input size \(MB\):\s*([\d.]+)', line)[0])
-            elif "Forward/backward pass size (MB):" in line:
-                forward_backward_size_mb = float(re.findall(r'Forward/backward pass size \(MB\):\s*([\d.]+)', line)[0])
-            elif "Params size (MB):" in line:
-                params_size_mb = float(re.findall(r'Params size \(MB\):\s*([\d.]+)', line)[0])
-            elif "Estimated Total Size (MB):" in line:
-                estimated_total_size_mb = float(re.findall(r'Estimated Total Size \(MB\):\s*([\d.]+)', line)[0])
-
-        # Final consistency check
-        if temp != total_params:
-            raise ValueError("Mismatch between total params in summary and parsed params.")
+            # Extract in_features and out_features to update current_activations for NonDynamicallyQuantizableLinear layers
+            activation_match = re.search(activations_pattern, line)
+            if activation_match:
+                in_features, out_features = map(int, activation_match.groups())
+                current_activations = out_features   # Update the activations
 
 
-        if len(activation_functions_list) > 0:
-            activation_function = most_frequent_activation_function(activation_functions_list)
-        else:
-            activation_function = "ReLU"
+            # Append the layer and its activations to the list
+            activations_params.append(('NonDynamicallyQuantizableLinear', current_activations * batch_size, params))
+            total_activations += current_activations
 
-        return activations_params, activation_function, depth, total_params, total_activations, input_size_mb, forward_backward_size_mb, params_size_mb, estimated_total_size_mb, layer_counts
+            # Increment layer count
+            layer_counts['NonDynamicallyQuantizableLinear'] += 1
+            depth += 1
 
-    except Exception as e:
-        print(f"Error processing {out_file}: {e}")
-        return [], 'None', 0, 0, 0, 0.0, 0.0, 0.0, 0.0, {
-            'conv2d': 0,
-            'batchnorm2d': 0,
-            'dropout': 0,
-            'adaptive_avg_pool2d': 0,
-            'linear': 0,
-            'softmax': 0
-        }
+            # Skip further checks for this line since it's already processed
+            continue
 
+        # Now check for Linear layer information
+        linear_match = re.search(linear_pattern, line)
+        if linear_match:
+            params = int(linear_match.group(1).replace(',', ''))
+            total_params += params
+            accumulated_params += params  # Accumulate over the transformer layers
+
+            # Extract in_features and out_features to update current_activations for Linear layers
+            activation_match = re.search(activations_pattern, line)
+            if activation_match:
+                in_features, out_features = map(int, activation_match.groups())
+                current_activations = out_features   # Update the activations
+
+            # Append the layer and its activations to the list
+            activations_params.append(('Linear', current_activations * batch_size, params))
+            total_activations += current_activations
+
+            # Increment layer count
+            layer_counts['Linear'] += 1
+            depth += 1
+
+        # Handle LayerNorm and Dropout layers, which do not change activations
+        elif 'LayerNorm' in line:
+            layer_counts['LayerNorm'] += 1
+            activations_params.append(('LayerNorm', current_activations, 0))  # No params for LayerNorm
+            total_activations += current_activations
+            depth += 1
+
+        elif 'Dropout' in line:
+            layer_counts['Dropout'] += 1
+            activations_params.append(('Dropout', current_activations, 0))  # No params for Dropout
+            total_activations += current_activations
+            depth += 1
+
+    return {
+        "activations_params": activations_params,
+        "total_params": total_params,
+        "total_activations": total_activations,
+        "accumulated_params": accumulated_params,
+        "layer_counts": dict(layer_counts),
+        "depth": depth
+    }
 
 
 
@@ -284,7 +153,7 @@ def process_model_files(directory, model_file):
     model = classification_gpu_usage.load_from_checkpoint(checkpoint_path, output_size=output_size)
 
 
-    # Print the state_dict to see if the weights are loaded (you can print keys or size)
+    # # Print the state_dict to see if the weights are loaded (you can print keys or size)
     state_dict = model.state_dict()
     
     # Checking some key parameters, for example, the first few layers
@@ -294,20 +163,22 @@ def process_model_files(directory, model_file):
     
     # Loop through all files in the directory
     for filename in os.listdir(directory):
-        if filename.endswith('.model'):
+        if "gpt" in filename:
+            continue
+        
+        if filename.endswith('.txt'):
             # Extract batch size from the filename (e.g., "modelName_batchSize.model")
-            match = re.search(r'_(\d+)\.model$', filename)
-            if not match:
-                print(f"Batch size not found in file name: {filename}")
-                continue
             
-            batch_size = int(match.group(1))
+            batch_size, sequence_length = get_batchsize_and_sequrenceLength(filename)
             
             # Construct the full file path
             file_path = os.path.join(directory, filename)
             
+
+            print(file_path)
+
             # Extract model information using the parser function
-            features = extract_model_info(file_path, batch_size)
+            features = extract_model_info(file_path, batch_size, sequence_length)
             
             model.eval()
 
@@ -329,44 +200,41 @@ def prepare_features_for_model(features, batch_size):
     Modify this function to extract relevant features.
     """
     
-    # the order, we should pass the data to the model
-    # [[total_activations, total_parameters, batch_size, total_activations_batch_size,
-    #                       conv2d_count, batchnorm2d_count, dropout_count, 
-    #                       activation_encoding_sin, activation_encoding_cos]]
-    
     # Unpack the features (adapt depending on what features your model needs)
 
-    # print(features)
+    activations_params = features["activations_params"]
+    total_params = features["total_params"], 
+    total_activations = features["total_activations"] 
+    accumulated_params = features["accumulated_params"], 
+    layer_counts = features["layer_counts"]
+    depth = features["depth"]
     
-    activations_params, activation_function, depth, total_params, total_activations, input_size_mb, forward_backward_size_mb, params_size_mb, estimated_total_size_mb, layer_counts = features
-    
-    activation_encoding = get_activation_encoding(activation_function)
 
-    # Packing the features into a list for mlp cnn estimator (modify as needed)
+    # the order, we should pass the data to the model
+    # 'Depth','Total Activations', 'Total_Activations_Batch_Size', 'Total Parameters', 'Batch Size',
+    #                       'Linear Count', 'LayerNorm Count', 'Dropout Count'
+    
     feature_list_mlp = [
-        total_activations,                  # Feature 1
-        total_params,                       # Feature 2
-        batch_size,                         # Feature 3
-        total_activations * batch_size,     # Feature 4
-        layer_counts['conv2d'],             # Feature 5
-        layer_counts['batchnorm2d'],        # Feature 6
-        layer_counts['dropout'],            # Feature 7
-        activation_encoding[0],             # Feature 8 (use positional encoding for the activation function)
-        activation_encoding[1]              # Feature 9 (use positional encoding for the activation function)
+        depth,                                   # Feature 1
+        total_activations,                       # Feature 2
+        total_activations * batch_size,          # Feature 3
+        total_params[0],                            # Feature 4
+        batch_size,                              # Feature 5
+        layer_counts['Linear'],                  # Feature 6
+        layer_counts['LayerNorm'],               # Feature 7
+        layer_counts['Dropout'],                 # Feature 8
     ]
 
     # Packing the features into a list for transformer-based cnn estimator (modify as needed)
     feature_list_transformer = [
-        activations_params,             # series of info per layer sequentially given to 
-        total_activations,              # Feature 1
-        total_params,                   # Feature 2
-        batch_size,                     # Feature 3
-        total_activations * batch_size, # Feature 4
-        layer_counts['conv2d'],         # Feature 5
-        layer_counts['batchnorm2d'],    # Feature 6
-        layer_counts['dropout'],        # Feature 7
-        activation_encoding[0],         # Feature 8 (use positional encoding for the activation function)
-        activation_encoding[1]          # Feature 9 (use positional encoding for the activation function)
+        depth,                                   # Feature 1
+        total_activations,                       # Feature 2
+        total_activations * batch_size,          # Feature 3
+        total_params,                            # Feature 4
+        batch_size,                              # Feature 5
+        layer_counts['Linear'],                  # Feature 6
+        layer_counts['LayerNorm'],               # Feature 7
+        layer_counts['Dropout'],                 # Feature 8
     ]
     
     # Add other features as necessary for your model
@@ -374,7 +242,7 @@ def prepare_features_for_model(features, batch_size):
 
 # Usage example
 if __name__ == "__main__":
-    directory = 'trans_models'  # Specify the directory containing .model files
-    model_file = 'estimator/XXX'  # Specify the path to the pickled model
+    directory = 'Trans_models'  # Specify the directory containing .model files
+    model_file = 'estimator/transformer_mlp_8gig.ckpt'  # Specify the path to the pickled model
     
     process_model_files(directory, model_file)

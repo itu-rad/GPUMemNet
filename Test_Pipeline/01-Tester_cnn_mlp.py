@@ -329,14 +329,6 @@ def prepare_features_for_model(features, batch_size):
     Modify this function to extract relevant features.
     """
     
-    # the order, we should pass the data to the model
-    # [[total_activations, total_parameters, batch_size, total_activations_batch_size,
-    #                       conv2d_count, batchnorm2d_count, dropout_count, 
-    #                       activation_encoding_sin, activation_encoding_cos]]
-    
-    # Unpack the features (adapt depending on what features your model needs)
-
-    # print(features)
     
     activations_params, activation_function, depth, total_params, total_activations, input_size_mb, forward_backward_size_mb, params_size_mb, estimated_total_size_mb, layer_counts = features
     
@@ -354,23 +346,9 @@ def prepare_features_for_model(features, batch_size):
         activation_encoding[0],             # Feature 8 (use positional encoding for the activation function)
         activation_encoding[1]              # Feature 9 (use positional encoding for the activation function)
     ]
-
-    # Packing the features into a list for transformer-based cnn estimator (modify as needed)
-    feature_list_transformer = [
-        activations_params,             # series of info per layer sequentially given to 
-        total_activations,              # Feature 1
-        total_params,                   # Feature 2
-        batch_size,                     # Feature 3
-        total_activations * batch_size, # Feature 4
-        layer_counts['conv2d'],         # Feature 5
-        layer_counts['batchnorm2d'],    # Feature 6
-        layer_counts['dropout'],        # Feature 7
-        activation_encoding[0],         # Feature 8 (use positional encoding for the activation function)
-        activation_encoding[1]          # Feature 9 (use positional encoding for the activation function)
-    ]
     
-    # Add other features as necessary for your model
-    return feature_list_mlp, feature_list_transformer
+
+    return feature_list_mlp
 
 # Usage example
 if __name__ == "__main__":

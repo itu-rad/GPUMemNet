@@ -1,0 +1,188 @@
+XLNetForSequenceClassification(
+  (transformer): XLNetModel(
+    (word_embedding): Embedding(32000, 768), 24,576,000 params
+    (layer): ModuleList(
+      (0): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 2,954,496 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (layer_1): Linear(in_features=768, out_features=3072, bias=True), 2,362,368 params
+          (layer_2): Linear(in_features=3072, out_features=768, bias=True), 2,360,064 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 4,723,968 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 7,678,464 params
+      (1): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 2,954,496 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (layer_1): Linear(in_features=768, out_features=3072, bias=True), 2,362,368 params
+          (layer_2): Linear(in_features=3072, out_features=768, bias=True), 2,360,064 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 4,723,968 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 7,678,464 params
+      (2): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 2,954,496 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (layer_1): Linear(in_features=768, out_features=3072, bias=True), 2,362,368 params
+          (layer_2): Linear(in_features=3072, out_features=768, bias=True), 2,360,064 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 4,723,968 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 7,678,464 params
+      (3): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 2,954,496 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (layer_1): Linear(in_features=768, out_features=3072, bias=True), 2,362,368 params
+          (layer_2): Linear(in_features=3072, out_features=768, bias=True), 2,360,064 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 4,723,968 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 7,678,464 params
+      (4): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 2,954,496 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (layer_1): Linear(in_features=768, out_features=3072, bias=True), 2,362,368 params
+          (layer_2): Linear(in_features=3072, out_features=768, bias=True), 2,360,064 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 4,723,968 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 7,678,464 params
+      (5): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 2,954,496 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (layer_1): Linear(in_features=768, out_features=3072, bias=True), 2,362,368 params
+          (layer_2): Linear(in_features=3072, out_features=768, bias=True), 2,360,064 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 4,723,968 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 7,678,464 params
+      (6): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 2,954,496 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (layer_1): Linear(in_features=768, out_features=3072, bias=True), 2,362,368 params
+          (layer_2): Linear(in_features=3072, out_features=768, bias=True), 2,360,064 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 4,723,968 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 7,678,464 params
+      (7): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 2,954,496 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (layer_1): Linear(in_features=768, out_features=3072, bias=True), 2,362,368 params
+          (layer_2): Linear(in_features=3072, out_features=768, bias=True), 2,360,064 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 4,723,968 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 7,678,464 params
+      (8): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 2,954,496 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (layer_1): Linear(in_features=768, out_features=3072, bias=True), 2,362,368 params
+          (layer_2): Linear(in_features=3072, out_features=768, bias=True), 2,360,064 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 4,723,968 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 7,678,464 params
+      (9): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 2,954,496 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (layer_1): Linear(in_features=768, out_features=3072, bias=True), 2,362,368 params
+          (layer_2): Linear(in_features=3072, out_features=768, bias=True), 2,360,064 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 4,723,968 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 7,678,464 params
+      (10): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 2,954,496 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (layer_1): Linear(in_features=768, out_features=3072, bias=True), 2,362,368 params
+          (layer_2): Linear(in_features=3072, out_features=768, bias=True), 2,360,064 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 4,723,968 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 7,678,464 params
+      (11): XLNetLayer(
+        (rel_attn): XLNetRelativeAttention(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+        ), 2,954,496 params
+        (ff): XLNetFeedForward(
+          (layer_norm): LayerNorm((768,), eps=1e-12, elementwise_affine=True), 1,536 params
+          (layer_1): Linear(in_features=768, out_features=3072, bias=True), 2,362,368 params
+          (layer_2): Linear(in_features=3072, out_features=768, bias=True), 2,360,064 params
+          (dropout): Dropout(p=0.1, inplace=False), 0 params
+          (activation_function): GELUActivation(), 0 params
+        ), 4,723,968 params
+        (dropout): Dropout(p=0.1, inplace=False), 0 params
+      ), 7,678,464 params
+    ), 92,141,568 params
+    (dropout): Dropout(p=0.1, inplace=False), 0 params
+  ), 116,718,336 params
+  (sequence_summary): SequenceSummary(
+    (summary): Linear(in_features=768, out_features=768, bias=True), 590,592 params
+    (activation): Tanh(), 0 params
+    (first_dropout): Identity(), 0 params
+    (last_dropout): Dropout(p=0.1, inplace=False), 0 params
+  ), 590,592 params
+  (logits_proj): Linear(in_features=768, out_features=2, bias=True), 1,538 params
+), 117,310,466 params
+=======================================================================
+Total params: 81,874,178
+Trainable params: 81,874,178
+Non-trainable params: 0
+-----------------------------------------------------------------------
