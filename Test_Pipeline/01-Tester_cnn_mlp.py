@@ -311,7 +311,7 @@ def process_model_files(directory, model_file):
             
             model.eval()
 
-            input_features, _ = prepare_features_for_model(features, batch_size)
+            input_features = prepare_features_for_model(features, batch_size)
             input_features = torch.tensor(input_features, dtype=torch.float32)
             input_features = input_features.view(1, -1)  # Reshape if necessary
 
@@ -320,6 +320,23 @@ def process_model_files(directory, model_file):
                 predictions = torch.argmax(logits, dim=1)  # Assuming classification task
 
             print(filename, "Predictions:", predictions)
+            
+
+
+            activations = input_features[0][0]
+            parameters = input_features[0][1]
+            batch_size = input_features[0][2]
+            gradients = parameters
+
+            horus_formula_estimation = (activations * batch_size + parameters) + (batch_size * gradients)
+
+            horus_in_bytes = horus_formula_estimation * 4
+
+            horus_estimations_MB = horus_in_bytes / (1024 ** 2)
+
+            print("Horus Formual Estimation: ", horus_estimations_MB, activations, parameters, batch_size)
+
+            
 
 def prepare_features_for_model(features, batch_size):
     """

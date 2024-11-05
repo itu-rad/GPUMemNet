@@ -48,15 +48,22 @@ def extract_model_info(file_path, batch_size, sequence_length):
     linear_pattern = r'Linear\(.*?\),\s*([\d,]+)\s*params'
     non_dynamically_linear_pattern = r'NonDynamicallyQuantizableLinear\(.*?\),\s*([\d,]+)\s*params'
     activations_pattern = r'in_features=(\d+),\s*out_features=(\d+)'
+    layernorm_pattern = r'LayerNorm\(.*?\),\s*([\d,]+)\s*params'
+    conv1d_pattern = r'Conv1D\(.*?\),\s*([\d,]+)\s*params'
+
 
     for line in lines:
+
+        total_params_match = re.search(r'Total params:\s*([\d,]+)', line)
+        if total_params_match:
+            total_params_str = total_params_match.group(1).replace(',', '')  # Remove commas
+            total_params = int(total_params_str)
+
         # First check for Embedding layer
         embedding_match = re.search(embedding_pattern, line)
         if embedding_match:
             vocab_size, embedding_dim, params = embedding_match.groups()
             params = int(params.replace(',', ''))  # Remove commas and convert to int
-            total_params += params
-            accumulated_params += params  # Accumulate over the transformer layers
 
             # Calculate the number of activations for the embedding layer
             current_activations = sequence_length * int(embedding_dim)
@@ -76,15 +83,12 @@ def extract_model_info(file_path, batch_size, sequence_length):
         non_dyn_linear_match = re.search(non_dynamically_linear_pattern, line)
         if non_dyn_linear_match:
             params = int(non_dyn_linear_match.group(1).replace(',', ''))
-            total_params += params
-            accumulated_params += params  # Accumulate over the transformer layers
 
             # Extract in_features and out_features to update current_activations for NonDynamicallyQuantizableLinear layers
             activation_match = re.search(activations_pattern, line)
             if activation_match:
                 in_features, out_features = map(int, activation_match.groups())
                 current_activations = out_features   # Update the activations
-
 
             # Append the layer and its activations to the list
             activations_params.append(('NonDynamicallyQuantizableLinear', current_activations * batch_size, params))
@@ -101,8 +105,6 @@ def extract_model_info(file_path, batch_size, sequence_length):
         linear_match = re.search(linear_pattern, line)
         if linear_match:
             params = int(linear_match.group(1).replace(',', ''))
-            total_params += params
-            accumulated_params += params  # Accumulate over the transformer layers
 
             # Extract in_features and out_features to update current_activations for Linear layers
             activation_match = re.search(activations_pattern, line)
@@ -120,8 +122,18 @@ def extract_model_info(file_path, batch_size, sequence_length):
 
         # Handle LayerNorm and Dropout layers, which do not change activations
         elif 'LayerNorm' in line:
+            layernorm_match = re.search(layernorm_pattern, line)
+
+            if layernorm_match:
+                params = int(layernorm_match.group(1).replace(',', ''))  # Extract params directly
+            else:
+                print("there is a problem")
+                exit()
+                params = 0  # Default to zero if not found
+
+            
             layer_counts['LayerNorm'] += 1
-            activations_params.append(('LayerNorm', current_activations, 0))  # No params for LayerNorm
+            activations_params.append(('LayerNorm', current_activations, params))  # No params for LayerNorm
             total_activations += current_activations
             depth += 1
 
@@ -130,6 +142,42 @@ def extract_model_info(file_path, batch_size, sequence_length):
             activations_params.append(('Dropout', current_activations, 0))  # No params for Dropout
             total_activations += current_activations
             depth += 1
+        
+        elif 'Conv1D' in line:
+            conv1d_match = re.search(conv1d_pattern, line)
+            if conv1d_match:
+                params = int(conv1d_match.group(1).replace(',', ''))
+
+                in_features = current_activations
+                # out_features = (params // (in_features + 1))  # Solve for out_features
+
+                out_features = current_activations
+
+                # current_activations = sequence_length * out_features
+
+                # Append the layer and its activations to the list
+                # activations_params.append(('Conv1D', current_activations * batch_size, params))
+                activations_params.append(('Linear', current_activations * batch_size, params))
+
+                total_activations += current_activations
+
+                # Increment layer count
+                layer_counts['Conv1D'] += 1
+                
+                # in this version, our model is unaware of conv layers, so we give them as linear layers
+                layer_counts['Linear'] += 1
+
+                depth += 1
+
+            elif 'NewGELUActivation' in line:
+                # Since there are no parameters, we set params to 0
+                params = 0
+                activations_params.append(('NewGELUActivation', current_activations * batch_size, params))
+                total_activations += current_activations
+
+                # Increment layer count
+                # layer_counts['NewGELUActivation'] += 1
+                depth += 1
 
     return {
         "activations_params": activations_params,
@@ -163,8 +211,8 @@ def process_model_files(directory, model_file):
     
     # Loop through all files in the directory
     for filename in os.listdir(directory):
-        if "gpt" in filename:
-            continue
+        # if "gpt" in filename:
+        #     continue
         
         if filename.endswith('.txt'):
             # Extract batch size from the filename (e.g., "modelName_batchSize.model")
@@ -174,15 +222,16 @@ def process_model_files(directory, model_file):
             # Construct the full file path
             file_path = os.path.join(directory, filename)
             
-
-            print(file_path)
-
             # Extract model information using the parser function
             features = extract_model_info(file_path, batch_size, sequence_length)
+            
             
             model.eval()
 
             input_features, _ = prepare_features_for_model(features, batch_size)
+            
+            print(file_path, "\n", input_features)
+            
             input_features = torch.tensor(input_features, dtype=torch.float32)
             input_features = input_features.view(1, -1)  # Reshape if necessary
 
@@ -191,6 +240,20 @@ def process_model_files(directory, model_file):
                 predictions = torch.argmax(logits, dim=1)  # Assuming classification task
 
             print(filename, "Predictions:", predictions)
+
+
+            activations = input_features[0][1]
+            parameters = input_features[0][3]
+            batch_size = input_features[0][4]
+            gradients = parameters
+
+            horus_formula_estimation = (activations * batch_size + parameters) + (batch_size * gradients)
+            horus_in_bytes = horus_formula_estimation * 4
+
+            horus_estimations_MB = horus_in_bytes / (1024 ** 2)
+
+            print("Horus Formual Estimation: ", horus_estimations_MB, activations, parameters, batch_size)
+
 
 def prepare_features_for_model(features, batch_size):
     """

@@ -63,8 +63,11 @@ def extract_transformer_model_info(summary, batch_size, sequence_length):
     linear_pattern = r'Linear\(.*?\),\s*([\d,]+)\s*params'
     non_dynamically_linear_pattern = r'NonDynamicallyQuantizableLinear\(.*?\),\s*([\d,]+)\s*params'
     activations_pattern = r'in_features=(\d+),\s*out_features=(\d+)'
+    layernorm_pattern = r'LayerNorm\(.*?\),\s*([\d,]+)\s*params'
 
     for line in lines:
+        # print(line)
+
         total_params_match = re.search(r'Total params:\s*([\d,]+)', line)
         if total_params_match:
             total_params_str = total_params_match.group(1).replace(',', '')  # Remove commas
@@ -87,6 +90,8 @@ def extract_transformer_model_info(summary, batch_size, sequence_length):
             # Increment layer count
             layer_counts['Embedding'] += 1
             depth += 1
+
+            # print(current_activations)
 
             # Skip further checks for this line since it's already processed
             continue
@@ -114,6 +119,7 @@ def extract_transformer_model_info(summary, batch_size, sequence_length):
             layer_counts['Linear'] += 1
             depth += 1
 
+            # print(current_activations)
             # Skip further checks for this line since it's already processed
             continue
 
@@ -129,6 +135,8 @@ def extract_transformer_model_info(summary, batch_size, sequence_length):
                 in_features, out_features = map(int, activation_match.groups())
                 current_activations = out_features   # Update the activations
 
+                # print(current_activations)
+
             # Append the layer and its activations to the list
             activations_params.append(('Linear', current_activations * batch_size, params))
             total_activations += current_activations
@@ -139,8 +147,18 @@ def extract_transformer_model_info(summary, batch_size, sequence_length):
 
         # Handle LayerNorm and Dropout layers, which do not change activations
         elif 'LayerNorm' in line:
+            layernorm_match = re.search(layernorm_pattern, line)
+
+            if layernorm_match:
+                params = int(layernorm_match.group(1).replace(',', ''))  # Extract params directly
+            else:
+                print("there is a problem")
+                params = 0  # Default to zero if not found
+
+            # print(current_activations)
+            
             layer_counts['LayerNorm'] += 1
-            activations_params.append(('LayerNorm', current_activations, 0))  # No params for LayerNorm
+            activations_params.append(('LayerNorm', current_activations, params))  # No params for LayerNorm
             total_activations += current_activations
             depth += 1
 
@@ -149,6 +167,8 @@ def extract_transformer_model_info(summary, batch_size, sequence_length):
             activations_params.append(('Dropout', current_activations, 0))  # No params for Dropout
             total_activations += current_activations
             depth += 1
+
+            # print(current_activations)
 
     return {
         "activations_params": activations_params,
@@ -244,6 +264,8 @@ def process_dataset(directories, output_csv):
                             'Dropout Count': model_info['layer_counts'].get('Dropout', 0),
                             'Status': status
                         })
+
+                        break
 
 if __name__ == "__main__":
     dataset_directories = ["../../transformer_dataset_step1", "../../transformer_dataset_step2"]  # Replace with actual dataset directories
