@@ -1,0 +1,8 @@
+pandas
+scikit-learn
+torch
+pytorch-lightning
+numpy
+requests
+pyyaml
+argparse

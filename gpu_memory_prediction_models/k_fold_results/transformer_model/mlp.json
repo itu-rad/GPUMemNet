@@ -1,0 +1,104 @@
+[
+    {
+        "accuracy": 0.9942857142857143,
+        "precision": 0.9943863486410072,
+        "recall": 0.9942857142857143,
+        "f1": 0.9942879076316719,
+        "below_diagonal_percentage": 0.002857142857142857,
+        "confusion_matrix": [
+            [
+                596,
+                1,
+                0,
+                0
+            ],
+            [
+                2,
+                83,
+                1,
+                0
+            ],
+            [
+                0,
+                0,
+                10,
+                0
+            ],
+            [
+                0,
+                0,
+                0,
+                7
+            ]
+        ],
+        "classification_report": "              precision    recall  f1-score   support\n\n           0       1.00      1.00      1.00       597\n           1       0.99      0.97      0.98        86\n           2       0.91      1.00      0.95        10\n           3       1.00      1.00      1.00         7\n\n    accuracy                           0.99       700\n   macro avg       0.97      0.99      0.98       700\nweighted avg       0.99      0.99      0.99       700\n"
+    },
+    {
+        "accuracy": 0.97,
+        "precision": 0.969994372189376,
+        "recall": 0.97,
+        "f1": 0.9691038051283987,
+        "below_diagonal_percentage": 0.02,
+        "confusion_matrix": [
+            [
+                581,
+                5,
+                0,
+                0
+            ],
+            [
+                8,
+                83,
+                0,
+                0
+            ],
+            [
+                0,
+                5,
+                10,
+                2
+            ],
+            [
+                0,
+                0,
+                1,
+                5
+            ]
+        ],
+        "classification_report": "              precision    recall  f1-score   support\n\n           0       0.99      0.99      0.99       586\n           1       0.89      0.91      0.90        91\n           2       0.91      0.59      0.71        17\n           3       0.71      0.83      0.77         6\n\n    accuracy                           0.97       700\n   macro avg       0.88      0.83      0.84       700\nweighted avg       0.97      0.97      0.97       700\n"
+    },
+    {
+        "accuracy": 0.9871428571428571,
+        "precision": 0.9872045925089404,
+        "recall": 0.9871428571428571,
+        "f1": 0.986890092879257,
+        "below_diagonal_percentage": 0.007142857142857143,
+        "confusion_matrix": [
+            [
+                608,
+                2,
+                0,
+                0
+            ],
+            [
+                2,
+                65,
+                0,
+                0
+            ],
+            [
+                0,
+                2,
+                10,
+                2
+            ],
+            [
+                0,
+                0,
+                1,
+                8
+            ]
+        ],
+        "classification_report": "              precision    recall  f1-score   support\n\n           0       1.00      1.00      1.00       610\n           1       0.94      0.97      0.96        67\n           2       0.91      0.71      0.80        14\n           3       0.80      0.89      0.84         9\n\n    accuracy                           0.99       700\n   macro avg       0.91      0.89      0.90       700\nweighted avg       0.99      0.99      0.99       700\n"
+    }
+]
