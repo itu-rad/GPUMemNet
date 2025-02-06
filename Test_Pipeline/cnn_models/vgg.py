@@ -10,6 +10,7 @@ from tqdm import tqdm  # For progress bar
 from torchsummary import summary  # For model summary
 from contextlib import redirect_stdout
 
+import time
 
 
 # added by Ehsan for using tensorfake for memory estimation
@@ -193,9 +194,12 @@ def train_vgg(batch_size, num_epochs=10, learning_rate=0.001, data_dir='/raid/da
     print("Training finished.")
 
 if __name__ == "__main__":
+
+    start = time.time()
+
     parser = argparse.ArgumentParser(description='Train VGG on ImageNet.')
     parser.add_argument('--batch_size', type=int, default=32, help='Batch size for training.')
-    parser.add_argument('--num_epochs', type=int, default=10, help='Number of epochs to train.')
+    parser.add_argument('--num_epochs', type=int, default=1, help='Number of epochs to train.')
     parser.add_argument('--learning_rate', type=float, default=0.001, help='Learning rate.')
     parser.add_argument('--data_dir', type=str, default='/raid/datasets/imagenet', help='Directory for ImageNet dataset.')
     parser.add_argument('--meta_cache_dir', type=str, default='/home/ehyo/.torch_cache/imagenet_meta', help='Directory for storing metadata cache.')
@@ -203,3 +207,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     train_vgg(batch_size=args.batch_size, num_epochs=args.num_epochs, learning_rate=args.learning_rate, data_dir=args.data_dir, meta_cache_dir=args.meta_cache_dir)
+
+    end = time.time()
+
+    execution_time = end - start
+
+    print("\n execution time: ", execution_time)

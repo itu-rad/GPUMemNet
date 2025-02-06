@@ -1,0 +1,11 @@
+got it:  3
+Running batch size 64
+GB after forward: 3.0686402320861816
+GB after backward: 3.0843547955155373
+3311800744
+Model summary saved to inceptionv3_64.model
+Epoch [1/1], Loss: 4.411982065266833
+Validation Loss: 3.1031755408667543, Accuracy: 32.82%
+Training finished.
+
+ execution time:  2777.439348459244

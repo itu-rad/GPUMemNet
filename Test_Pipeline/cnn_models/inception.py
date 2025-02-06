@@ -10,6 +10,8 @@ import argparse
 import io  # Import io for capturing the summary output
 from contextlib import redirect_stdout
 
+import time
+
 # added by Ehsan for using tensorfake for memory estimation
 from collections import Counter
 import functools
@@ -181,6 +183,9 @@ def train_inception(batch_size, num_epochs=10, learning_rate=0.001, data_dir='/r
 
 # Argument parsing
 if __name__ == "__main__":
+
+    start = time.time()
+
     parser = argparse.ArgumentParser(description='Train InceptionV3 on ImageNet.')
     parser.add_argument('--batch_size', type=int, default=32, help='Batch size for training.')
     parser.add_argument('--num_epochs', type=int, default=10, help='Number of epochs to train.')
@@ -189,3 +194,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     train_inception(batch_size=args.batch_size, num_epochs=args.num_epochs, learning_rate=args.learning_rate, data_dir=args.data_dir)
+
+    end = time.time()
+
+    execution_time = end - start
+
+    print("\n execution time: ", execution_time)

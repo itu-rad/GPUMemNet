@@ -11,6 +11,7 @@ from torchsummary import summary  # For model summary
 import io
 from contextlib import redirect_stdout
 
+import time
 
 # added by Ehsan for using tensorfake for memory estimation
 from collections import Counter
@@ -194,6 +195,9 @@ def train_resnet50(batch_size, num_epochs=10, learning_rate=0.001, data_dir='/ra
     print("Training finished.")
 
 if __name__ == "__main__":
+
+    start = time.time()
+
     parser = argparse.ArgumentParser(description='Train ResNet50 on ImageNet.')
     parser.add_argument('--batch_size', type=int, default=32, help='Batch size for training.')
     parser.add_argument('--num_epochs', type=int, default=10, help='Number of epochs to train.')
@@ -204,3 +208,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     train_resnet50(batch_size=args.batch_size, num_epochs=args.num_epochs, learning_rate=args.learning_rate, data_dir=args.data_dir, meta_cache_dir=args.meta_cache_dir)
+
+    end = time.time()
+
+    execution_time = end - start
+
+    print("\n execution time: ", execution_time)

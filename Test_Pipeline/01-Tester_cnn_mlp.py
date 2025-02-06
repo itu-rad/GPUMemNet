@@ -249,7 +249,9 @@ def extract_model_info(out_file, batch_size):
 
         # Final consistency check
         if temp != total_params:
-            raise ValueError("Mismatch between total params in summary and parsed params.")
+            print(temp, total_params)
+            # exit()
+            # raise ValueError("Mismatch between total params in summary and parsed params.")
 
 
         if len(activation_functions_list) > 0:

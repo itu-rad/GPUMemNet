@@ -1,0 +1,11 @@
+got it:  3
+Running batch size 128
+GB after forward: 10.321292400360107
+GB after backward: 10.416022695600986
+11184119208
+Model summary saved to resnet50_128.model
+Epoch [1/1], Loss: 4.2836742843662226
+Validation Loss: 3.2279020166762953, Accuracy: 32.99%
+Training finished.
+
+ execution time:  2100.4227719306946

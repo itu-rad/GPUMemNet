@@ -1,0 +1,11 @@
+got it:  3
+Running batch size 32
+GB after forward: 2.3562214374542236
+GB after backward: 2.3684369698166847
+2543089832
+Model summary saved to mobilenet_32.model
+Epoch [1/1], Loss: 4.797018245862617
+Validation Loss: 3.55056453521482, Accuracy: 26.42%
+Training finished.
+
+ execution time:  2165.294081926346
