@@ -10,8 +10,8 @@ You can find the following material as follows:
 - Python scripts to clean the data produced by the aforementioned scripts, in "Data_Cleaner_scripts" folder
 - The dataset build throughout this work can be found in the "Dataset" folder
 - Notebooks for analyzing the dataset, training models can be found in the "Analysis" folder. Each of the model architectures have their own separate analysis notebooks that can be found in the corresponding subfolder.
-  - MLP step 1 dataset analysis [MLP Model]()
-  - MLP step 1 dataset analysis [Transformer Model]()
+  <!-- - MLP step 1 dataset analysis [MLP Model](Analysis/01-MLP/02-mlp_with_activation_norm_dropout_1000MiB.ipynb)
+  - MLP step 1 dataset analysis [Transformer Model](Analysis/01-MLP/02-MLP_step2_Transformer_1000MiB.ipynb)
 
   - MLP step 2 dataset analysis [MLP Model]()
   - MLP step 2 dataset analysis [Transformer Model]()
@@ -20,7 +20,7 @@ You can find the following material as follows:
   - CNN step 1 dataset analysis [Transformer Model]()
 
   - Link to TIMM library dataset analysis [MLP Model]()
-  - Link to TIMM library dataset analysis [Transformer Model]()
+  - Link to TIMM library dataset analysis [Transformer Model]() -->
 
   ---
   For Future:
