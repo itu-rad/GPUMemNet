@@ -18,3 +18,11 @@ Estimator_Transformer/03-trans_for_trans/lightning_logs
 
 screenlog-Transformer-step1.0
 transformer_dataset_step2
+
+Ensemble/__pycache__
+
+Ensemble/models/__pycache__
+
+Ensemble/lightning_logs
+
+Ensemble/dataloaders/__pycache__/
