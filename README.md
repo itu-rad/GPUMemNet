@@ -12,6 +12,8 @@ You can find the following material as follows:
 - Notebooks for analyzing the dataset, training models can be found in the "Analysis" folder. Each of the model architectures have their own separate analysis notebooks that can be found in the corresponding subfolder.
 
 Overheads of inference [notebook](Ensemble/Overheads.md)
+
+Overheads of Parsers [notebook](Test_Pipeline/parser_overhead.md)
   <!-- - MLP step 1 dataset analysis [MLP Model](Analysis/01-MLP/02-mlp_with_activation_norm_dropout_1000MiB.ipynb)
   - MLP step 1 dataset analysis [Transformer Model](Analysis/01-MLP/02-MLP_step2_Transformer_1000MiB.ipynb)
 

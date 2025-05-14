@@ -45,6 +45,7 @@ def evaluate_transformer(datatype, config_path="config.yaml", arch_path="transfo
     # Timed inference
     timings = []
     with torch.no_grad():
+        # 100 times running and then averaging over them
         for _ in range(100):
             start = time.time()
             _ = model(x, z)
@@ -52,9 +53,11 @@ def evaluate_transformer(datatype, config_path="config.yaml", arch_path="transfo
             end = time.time()
             timings.append((end - start) * 1000)
 
+    min_time_ms = min(timings)
+    max_time_ms = max(timings)
     avg_time_ms = sum(timings) / len(timings)
     std_time_ms = (sum((t - avg_time_ms) ** 2 for t in timings) / len(timings)) ** 0.5
-    print(f"✅ Inference Time: {avg_time_ms:.2f} ± {std_time_ms:.2f} ms")
+    print(f"✅ Inference Time | \nMin: {min_time_ms:.2f} ms \n Max: {max_time_ms:.2f} \nAverage: {avg_time_ms:.2f} ± {std_time_ms:.2f} ms")
 
     # VRAM usage
     torch.cuda.reset_peak_memory_stats()
