@@ -69,6 +69,8 @@ def evaluate_mlp(datatype, config_path="config.yaml"):
     # FLOPs
     try:
         flops = FlopCountAnalysis(model, x)
+        print(f"✅ FLOPs: {flops.total():.2f} FLOPs")
+        print(f"✅ FLOPs: {flops.total() / 1e6:.2f} MFLOPs")
         print(f"✅ FLOPs: {flops.total() / 1e9:.2f} GFLOPs")
     except Exception as e:
         print(f"⚠️ FLOPs estimation failed: {e}")

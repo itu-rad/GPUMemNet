@@ -7,10 +7,12 @@
 
 ```
 ✅ Inference Time | 
-Min: 2.27 ms 
- Max: 8.60 
-Average: 2.37 ± 0.63 ms
+Min: 2.22 ms 
+ Max: 2.53 
+Average: 2.25 ± 0.05 ms
 ✅ Peak VRAM usage: 9.25 MB
+✅ FLOPs: 168960.00 FLOPs
+✅ FLOPs: 0.17 MFLOPs
 ✅ FLOPs: 0.00 GFLOPs
 ✅ Total Parameters: 1,495
 ✅ Trainable Parameters: 1,495
@@ -24,10 +26,12 @@ Average: 2.37 ± 0.63 ms
 
 ```
 ✅ Inference Time | 
-Min: 2.25 ms 
- Max: 3.21 
-Average: 2.32 ± 0.10 ms
+Min: 2.26 ms 
+ Max: 2.54 
+Average: 2.27 ± 0.03 ms
 ✅ Peak VRAM usage: 9.26 MB
+✅ FLOPs: 187392.00 FLOPs
+✅ FLOPs: 0.19 MFLOPs
 ✅ FLOPs: 0.00 GFLOPs
 ✅ Total Parameters: 1,646
 ✅ Trainable Parameters: 1,646
@@ -41,10 +45,12 @@ Average: 2.32 ± 0.10 ms
 
 ```
 ✅ Inference Time | 
-Min: 2.26 ms 
- Max: 3.14 
-Average: 2.29 ± 0.09 ms
+Min: 2.28 ms 
+ Max: 8.82 
+Average: 2.40 ± 0.65 ms
 ✅ Peak VRAM usage: 9.26 MB
+✅ FLOPs: 180224.00 FLOPs
+✅ FLOPs: 0.18 MFLOPs
 ✅ FLOPs: 0.00 GFLOPs
 ✅ Total Parameters: 1,590
 ✅ Trainable Parameters: 1,590
@@ -59,10 +65,12 @@ Average: 2.29 ± 0.09 ms
 ```
 Maximum layers: 46
 ✅ Inference Time | 
-Min: 10.50 ms 
- Max: 14.22 
-Average: 10.70 ± 0.36 ms
+Min: 10.46 ms 
+ Max: 13.44 
+Average: 10.56 ± 0.30 ms
 ✅ Peak VRAM usage: 15.91 MB
+✅ FLOPs: 7465984.00 GFLOPs
+✅ FLOPs: 7.47 MFLOPs
 ✅ FLOPs: 0.01 GFLOPs
 ✅ Total Parameters: 7,556
 ✅ Trainable Parameters: 7,096
@@ -79,10 +87,12 @@ Average: 10.70 ± 0.36 ms
  'SiLU']
 Maximum layers: 119
 ✅ Inference Time | 
-Min: 10.52 ms 
- Max: 13.08 
-Average: 10.69 ± 0.27 ms
+Min: 10.68 ms 
+ Max: 11.03 
+Average: 10.74 ± 0.05 ms
 ✅ Peak VRAM usage: 28.10 MB
+✅ FLOPs: 18453504.00 GFLOPs
+✅ FLOPs: 18.45 MFLOPs
 ✅ FLOPs: 0.02 GFLOPs
 ✅ Total Parameters: 10,056
 ✅ Trainable Parameters: 8,866
@@ -97,10 +107,12 @@ Average: 10.69 ± 0.27 ms
 ```
 Maximum layers: 314
 ✅ Inference Time | 
-Min: 10.56 ms 
- Max: 20.99 
-Average: 10.72 ± 1.03 ms
+Min: 10.63 ms 
+ Max: 16.30 
+Average: 10.73 ± 0.56 ms
 ✅ Peak VRAM usage: 59.95 MB
+✅ FLOPs: 48210944.00 GFLOPs
+✅ FLOPs: 48.21 MFLOPs
 ✅ FLOPs: 0.05 GFLOPs
 ✅ Total Parameters: 13,586
 ✅ Trainable Parameters: 10,446

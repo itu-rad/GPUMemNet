@@ -69,6 +69,8 @@ def evaluate_transformer(datatype, config_path="config.yaml", arch_path="transfo
     # FLOPs
     try:
         flops = FlopCountAnalysis(model, (x, z))
+        print(f"✅ FLOPs: {flops.total():.2f} GFLOPs")
+        print(f"✅ FLOPs: {flops.total() / 1e6:.2f} MFLOPs")
         print(f"✅ FLOPs: {flops.total() / 1e9:.2f} GFLOPs")
     except Exception as e:
         print(f"⚠️ FLOPs estimation failed: {e}")
