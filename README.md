@@ -54,6 +54,11 @@ We looked into the cleaned data by looking into its distribution based on differ
 
 
 ## Overheads of the parser and the models' inference
+We also considered and characterized the overheads of parsers and the estimator models' overhead since one of the primary purpose of these estimators can be informing schedules/ resource managers to make more efficient decisions. 
+- [Parser overhead](Test_Pipeline/parser_overhead.md)
+- [Models' inference overhead](Ensemble/Overheads.md)
+
+
 
 ## Vision
 In the discussion section of our paper, we draw the roadmap on how contributors can contribute. As it is an deep learning-based estimator, the potential contributions and improvements to the current study can come from more data points, data points from different GPU models, with broader range of arguments, and also innovations on how to view the GPU memory estimation.
