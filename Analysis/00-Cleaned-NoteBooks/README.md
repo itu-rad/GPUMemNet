@@ -10,14 +10,14 @@ Use cases of these notebooks:
 ## MLP dataset
 - [Visualization](001-visualizations/MLP_visualizations.ipynb)
 - [MLP-based Analysis and Training](002-MLP-based-estimators/Full_MLP.ipynb)
-- [Transformer-based Analysis and Training]()
+- [Transformer-based Analysis and Training](003-Transformer-based-estimators/Transformer_estimator_for_MLP_data.ipynb)
 
 ## CNN dataset
 - [Visualization](001-visualizations/CNN_visualizations.ipynb)
 - [MLP-based Analysis and Training](002-MLP-based-estimators/Full_CNN.ipynb)
-- [Transformer-based Analysis and Training]()
+- [Transformer-based Analysis and Training](003-Transformer-based-estimators/Transformer_estimator_for_CNN_data.ipynb)
 
 ## Transformers dataset
 - [Visualization](001-visualizations/Transformer_visualization.ipynb)
 - [MLP-based Analysis and Training](002-MLP-based-estimators/Full_Transformer.ipynb)
-- [Transformer-based Analysis and Training]()
+- [Transformer-based Analysis and Training](003-Transformer-based-estimators/Transformer_for_Transformers_data.ipynb)
