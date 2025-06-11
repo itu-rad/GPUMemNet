@@ -10,9 +10,9 @@ import ast
 class LayerSequenceDataset(Dataset):
     def __init__(self, x_data, y_labels, max_seq_len, data_type='transformer'):
         self.x_data = [process_sequence_data(seq[0], data_type=data_type) for seq in x_data]
-        self.batch_size = [np.array(seq[1:]).astype(np.int64) for seq in x_data]
+        self.additional_features = [np.array(seq[1:]).astype(np.int64) for seq in x_data]
         self.y_labels = y_labels
-        self.x_data, self.batch_size, self.y_labels = get_filtered_lists(self.x_data, self.batch_size, self.y_labels)
+        self.x_data, self.additional_features, self.y_labels = get_filtered_lists(self.x_data, self.additional_features, self.y_labels)
         self.max_seq_len = max_seq_len
 
     def __len__(self):
@@ -20,14 +20,14 @@ class LayerSequenceDataset(Dataset):
 
     def __getitem__(self, idx):
         sequence = self.x_data[idx]
-        batch_size = self.batch_size[idx]
+        additional_features = self.additional_features[idx]
         label = self.y_labels[idx]
         # Padding sequences to max length
         if len(sequence) < self.max_seq_len:
             padded_sequence = np.pad(sequence, ((0, self.max_seq_len - len(sequence)), (0,0)), 'constant')
         else:
             padded_sequence = sequence[:self.max_seq_len]
-        return torch.tensor(padded_sequence, dtype=torch.float32), torch.tensor(batch_size, dtype=torch.float32), torch.tensor(label, dtype=torch.long)
+        return torch.tensor(padded_sequence, dtype=torch.float32), torch.tensor(additional_features, dtype=torch.float32), torch.tensor(label, dtype=torch.long)
 
 
 def encode_layer_transformer(layer_type):

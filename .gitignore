@@ -26,3 +26,8 @@ Ensemble/models/__pycache__
 Ensemble/lightning_logs
 
 Ensemble/dataloaders/__pycache__/
+
+
+
+Analysis/00-Cleaned-NoteBooks/002-MLP-based-estimators/lightning_logs/
+Analysis/00-Cleaned-NoteBooks/003-Transformer-based-estimators/lightning_logs/

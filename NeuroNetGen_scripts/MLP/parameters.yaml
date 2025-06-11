@@ -1,0 +1,41 @@
+base_data_dir: "mlp_dataset_step2"
+num_random_configs: 3000
+
+input_size:
+  min: 4
+  max: 4096
+
+output_size:
+  min_ratio: 0.25  # output_size is at least 1 or input_size * min_ratio
+
+batch_size:
+  min: 1
+  max: 256
+  multiplier: 4
+
+depth:
+  min: 1
+  max: 11
+
+architectures:
+  - pyramid
+  - uniform
+  - bottleneck
+  - gradual
+
+activations:
+  - relu
+  - leaky_relu
+  - prelu
+  - elu
+  - selu
+  - tanh
+  - softplus
+  - swish
+  - mish
+  - gelu
+  - identity
+
+dropout:
+  min: 0.1
+  max: 0.5

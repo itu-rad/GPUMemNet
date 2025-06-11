@@ -46,13 +46,16 @@ def infer_mlp4cnn(input_list):
     config = _get_config()
     model = EnsembleModel.load_from_checkpoint(
         "../trained_models/mlp4cnn/mlp4cnn.ckpt",
-        model_list=[1, 2, 3, 4, 5, 6],
+        model_list=[1,2,3,4,5,6,7,8,4,5,6,7,8,4,5,6],
         input_size=len(input_list),
         output_size=6,
         max_neurons=8,
         min_neurons=4,
         learning_rate=config["learning_rate"]
     )
+
+    
+
     model.eval()
     with torch.no_grad():
         tensor = torch.tensor(input_list, dtype=torch.float32).unsqueeze(0)
@@ -144,4 +147,15 @@ print("gashang tar az fereshte has!")
 
 # 'layers', 'batch_size', 'all_parameters', 'all_activations', 'batch_norm_layer', 'dropout_layers', 'activation_encoding_sin', 'activation_encoding_cos'
 
-print(infer_mlp4mlp([100, 100, 1092830981, 290374098273, 1234, 123123, 0.1, 0.2]))
+# print(infer_mlp4mlp([100, 100, 1092830981, 290374098273, 1234, 123123, 0.1, 0.2]))
+
+
+# ===========================================================
+# inference for CNNs
+
+# 'Depth','Total Activations', 'Total_Activations_Batch_Size', 
+# 'Total Parameters', 'Batch Size', 'Conv2d Count', 
+# 'BatchNorm2d Count', 'Dropout Count', 'activation_encoding_sin', 'activation_encoding_cos',
+# ===========================================================
+
+print(infer_mlp4cnn())

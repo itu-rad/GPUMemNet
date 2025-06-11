@@ -101,7 +101,7 @@ def cnn_data4mlp(config, kfold=False):
 
     # Count instances per class
     class_counts = len(df['memory_usage_label'].value_counts())
-    desired_features = df[['Depth','Total Activations', 'Total_Activations_Batch_Size', 'Total Parameters', 'Batch Size',
+    desired_features = df[['Depth', 'Total Activations', 'Total_Activations_Batch_Size', 'Total Parameters', 'Batch Size',
             'Conv2d Count', 'BatchNorm2d Count', 'Dropout Count', 'activation_encoding_sin',
             'activation_encoding_cos',
             # 'Input Size (MB)', 'Forward/Backward Pass Size (MB)','Params Size (MB)', 'Estimated Total Size (MB)',

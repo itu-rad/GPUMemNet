@@ -3,24 +3,31 @@ import os
 import time
 import numpy as np
 import multiprocessing
+import yaml
+
+
+# Load config from YAML file
+with open("mlp_config.yaml", "r") as file:
+    config = yaml.safe_load(file)
+
 
 # Directory to save the data logs and outputs
-base_data_dir = "dataset"
+base_data_dir = config["base_data_dir"]
 os.makedirs(base_data_dir, exist_ok=True)
 
 # Number of random configurations to generate (instead of models_list.txt)
-num_random_configs = 3000  # You can change this to any number of configurations
+num_random_configs = config["num_random_configs"]  # You can change this to any number of configurations
 
 # Seed for reproducibility
 np.random.seed(99)
 
 # Function to generate random MLP parameters using NumPy's random.uniform
 def generate_random_mlp_config():
-    input_size = int(np.random.uniform(4, 4096))  # Random input size between 4 and 4096
-    output_size = int(np.random.uniform(1, max(2, input_size // 4)))  # Random output size, smaller than input size
-    batch_size = int(np.random.uniform(1, 256) * 4)  # batch_size
-    depth = int(np.random.uniform(1, 11))  # Random depth (number of hidden layers)
-    architecture = np.random.choice(['pyramid', 'uniform', 'bottleneck', 'gradual'])  # Random architecture type
+    input_size = int(np.random.uniform(config["input_size"]["min"], config["input_size"]["max"]))  # Random input size between 4 and 4096
+    output_size = int(np.random.uniform(1, max(2, input_size * config["output_size"]["min_ratio"])))  # Random output size, smaller than input size
+    batch_size = int(np.random.uniform(config["batch_size"]["min"], config["batch_size"]["max"]) * config["batch_size"]["multiplier"])  # batch_size
+    depth = int(np.random.uniform(config["depth"]["min"], config["depth"]["max"]))  # Random depth (number of hidden layers)
+    architecture = np.random.choice(config["architectures"])  # Random architecture type
     return input_size, output_size, depth, architecture, batch_size
 
 # Function to run system monitoring tools (nvidia-smi, dcgmi, top)
