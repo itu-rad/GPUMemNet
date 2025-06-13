@@ -52,6 +52,26 @@ For each neural network type (**MLP**, **CNN**, **Transformer**), we provide two
 ## Visualization, Analysis, and Training Notebooks
 We looked into the cleaned data by looking into its distribution based on different selected features, visualized through PCA and TSNE glasses. Also, trained MLP-, and transformer-based models on then to validate the idea of using deep learning for estimating GPU memory usage. For diving into this check more [here](Analysis/00-Cleaned-NoteBooks/README.md).
 
+### Training, Validation, and Testing with Ensemble Models
+
+To train and test ensemble models, ensure that you are using the correct dataset. When running training or evaluation, specify both the dataset and the model type using the appropriate command-line arguments.
+
+**Training:**
+```bash
+python train.py --d [mlp, cnn, transformer] --m [mlp, transformer]
+```
+
+**Validation:**
+```bash
+python kfold_cross_validation.py --d [mlp, cnn, transformer] --m [mlp, transformer]
+```
+
+**Training:**
+```bash
+python test.py --d [mlp, cnn, transformer] --m [mlp, transformer]
+```
+
+To visualize the results, including the confusion matrix and other statistics, see the [visualization notebook](Ensemble/visualize_results.ipynb).
 
 ## Overheads of the parser and the models' inference
 We also considered and characterized the overheads of parsers and the estimator models' overhead since one of the primary purpose of these estimators can be informing schedules/ resource managers to make more efficient decisions. 
