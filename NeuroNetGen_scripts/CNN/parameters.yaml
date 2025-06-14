@@ -1,0 +1,52 @@
+base_data_dir: "cnn_dataset"
+num_random_configs: 3000
+
+input_channels: 3  # RGB; set 1 for grayscale
+
+num_classes:
+  min: 100
+  max: 1000
+
+base_num_filters:
+  min: 32
+  max: 512
+
+depth:
+  min: 1
+  max: 30
+
+batch_size:
+  min: 2
+  max: 32
+  multiplier: 2
+
+input_size:
+  min_even: 16
+  max_even: 112
+  multiplier: 2
+
+architectures:
+  - pyramid
+  - uniform
+  - bottleneck
+  - gradual
+  - hourglass
+  - residual
+  - dense
+
+activations:
+  - relu
+  - leaky_relu
+  - prelu
+  - elu
+  - selu
+  - tanh
+  - softplus
+  - swish
+  - mish
+  - gelu
+
+
+dropout:
+  min: 0.1
+  max: 0.5

@@ -4,33 +4,41 @@ import time
 import numpy as np
 import multiprocessing
 
+import yaml
+
+
+# Load YAML config
+with open("cnn_config.yaml", "r") as f:
+    config = yaml.safe_load(f)
+
+
 # Directory to save the data logs and outputs
-base_data_dir = "/home/ehyo/01-new_approach_dataset_fc/cnn_dataset_step4"
+base_data_dir = config["base_data_dir"]
 os.makedirs(base_data_dir, exist_ok=True)
 
 # Number of random configurations to generate
-num_random_configs = 3000  # You can change this to any number of configurations
+num_random_configs = config["num_random_configs"]
 
 # Seed for reproducibility
 np.random.seed(99)
 
 # Function to generate random CNN parameters using NumPy's random.uniform
 def generate_random_cnn_config():
-    input_channels = 3  # Randomly select between grayscale (1) and RGB (3) channels
+    input_channels = config["input_channels"]
     
-    num_classes = int(np.random.uniform(100, 1001))  # Random number of output classes (2-100 for classification)
+    num_classes = int(np.random.uniform(config["num_classes"]["min"], config["num_classes"]["max"] + 1))  # Random number of output classes (2-100 for classification)
     
-    base_num_filters = int(np.random.uniform(32, 512))  # Base number of filters between 16 and 512
+    base_num_filters = int(np.random.uniform(config["base_num_filters"]["min"], config["base_num_filters"]["max"] + 1))  # Base number of filters between 16 and 512
     
-    depth = int(np.random.uniform(1, 30))  # Random depth (number of convolutional layers)
+    depth = int(np.random.uniform(config["depth"]["min"], config["depth"]["max"]))  # Random depth (number of convolutional layers)
     
-    architecture = np.random.choice(['pyramid', 'uniform', 'bottleneck', 'gradual', 'hourglass', 'residual', 'dense'])  # Random architecture type
+    architecture = np.random.choice(config["architectures"])  # Random architecture type
     
     # Randomly choose activation function
-    activation = np.random.choice(['relu', 'leaky_relu', 'prelu', 'elu', 'selu', 'tanh', 'softplus', 'swish', 'mish', 'gelu'])
+    activation = np.random.choice(config["activations"])
     
     # Random dropout rate
-    dropout_rate = np.random.uniform(0.1, 0.5)  # Random dropout rate between 0.1 and 0.5
+    dropout_rate = np.random.uniform(config["dropout"]["min"], config["dropout"]["max"])  # Random dropout rate between 0.1 and 0.5
 
     # Randomly decide whether to use dropout, batch normalization, skip connections, and dilated convolutions
     use_dropout = np.random.choice([True, False])
@@ -40,9 +48,9 @@ def generate_random_cnn_config():
     # Input size: common image sizes (e.g., 32x32, 128x128, 224x224, etc.)
     # input_size = int(np.random.choice([28, 32, 64, 128, 224, 299, 334, 512, 1024]))
 
-    input_size = int(np.random.uniform(16, 113)) * 2
+    input_size = int(np.random.uniform(config["input_size"]["min_even"], config["input_size"]["max_even"])) * config["input_size"]["multiplier"]
 
-    batch_size = int(np.random.uniform(2, 32)) * 2
+    batch_size = int(np.random.uniform(config["batch_size"]["min"], config["batch_size"]["max"])) * config["batch_size"]["multiplier"]
 
     return input_channels, num_classes, depth, architecture, base_num_filters, batch_size, input_size, activation, dropout_rate, use_dropout, use_batch_norm
 
