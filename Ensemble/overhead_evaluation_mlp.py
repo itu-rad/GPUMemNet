@@ -20,13 +20,12 @@ def get_dataloader(datatype, config):
         raise ValueError(f"Unsupported datatype: {datatype}")
 
 def evaluate_mlp(datatype, config_path="config.yaml"):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    config = read_yaml(config_path)
+    import statistics
 
+    config = read_yaml(config_path)
     train_loader, _, _, class_counts = get_dataloader(datatype, config)
     x, _ = next(iter(train_loader))
     input_size = x.shape[-1]
-    x = x.to(device)
 
     model = EnsembleModel(
         model_list=[1, 2, 3, 4, 5, 6, 7],
@@ -35,51 +34,71 @@ def evaluate_mlp(datatype, config_path="config.yaml"):
         max_neurons=8,
         min_neurons=4,
         learning_rate=config["learning_rate"]
-    ).to(device).eval()
+    ).eval()  # initial model on CPU
 
-    # Warm-up
-    with torch.no_grad():
-        for _ in range(10):
-            _ = model(x)
+    results = {}
 
-    # Timed inference
-    timings = []
-    with torch.no_grad():
-        # 100
-        for _ in range(100):
-            start = time.time()
-            _ = model(x)
-            torch.cuda.synchronize()
-            end = time.time()
-            timings.append((end - start) * 1000)
+    def run_inference(label, device):
+        model_local = model.to(device)
+        x_local = x.to(device)
 
-    min_time_ms = min(timings)
-    max_time_ms = max(timings)
-    avg_time_ms = sum(timings) / len(timings)
-    std_time_ms = (sum((t - avg_time_ms) ** 2 for t in timings) / len(timings)) ** 0.5
-    print(f"✅ Inference Time | \nMin: {min_time_ms:.2f} ms \n Max: {max_time_ms:.2f} \nAverage: {avg_time_ms:.2f} ± {std_time_ms:.2f} ms")
+        # Warm-up
+        with torch.no_grad():
+            for _ in range(10):
+                _ = model_local(x_local)
 
-    # VRAM usage
-    torch.cuda.reset_peak_memory_stats()
-    with torch.no_grad():
-        _ = model(x)
-    mem_used_mb = torch.cuda.max_memory_allocated() / (1024 ** 2)
-    print(f"✅ Peak VRAM usage: {mem_used_mb:.2f} MB")
+        # Timed inference
+        timings = []
+        with torch.no_grad():
+            for _ in range(100):
+                start = time.time()
+                _ = model_local(x_local)
+                if device.type == "cuda":
+                    torch.cuda.synchronize()
+                end = time.time()
+                timings.append((end - start) * 1000)  # ms
+
+        stats = {
+            "min": min(timings),
+            "max": max(timings),
+            "avg": statistics.mean(timings),
+            "std": statistics.stdev(timings)
+        }
+
+        if device.type == "cuda":
+            torch.cuda.reset_peak_memory_stats()
+            with torch.no_grad():
+                _ = model_local(x_local)
+            stats["vram_mb"] = torch.cuda.max_memory_allocated() / (1024 ** 2)
+
+        results[label] = stats
+
+    # Run both GPU and CPU inference
+    if torch.cuda.is_available():
+        run_inference("GPU", torch.device("cuda"))
+    run_inference("CPU", torch.device("cpu"))
+
+    # Print summary
+    for label in results:
+        stats = results[label]
+        print(f"\n🧠 {label} Inference Stats:")
+        print(f"  Min:     {stats['min']:.2f} ms")
+        print(f"  Max:     {stats['max']:.2f} ms")
+        print(f"  Avg:     {stats['avg']:.2f} ± {stats['std']:.2f} ms")
+        if "vram_mb" in stats:
+            print(f"  VRAM:    {stats['vram_mb']:.2f} MB")
 
     # FLOPs
     try:
         flops = FlopCountAnalysis(model, x)
-        print(f"✅ FLOPs: {flops.total():.2f} FLOPs")
-        print(f"✅ FLOPs: {flops.total() / 1e6:.2f} MFLOPs")
-        print(f"✅ FLOPs: {flops.total() / 1e9:.2f} GFLOPs")
+        print(f"\n✅ FLOPs: {flops.total():.2f} ({flops.total() / 1e9:.2f} GFLOPs)")
     except Exception as e:
-        print(f"⚠️ FLOPs estimation failed: {e}")
+        print(f"\n⚠️ FLOPs estimation failed: {e}")
 
-    # Parameters
+    # Parameter count
     total = sum(p.numel() for p in model.parameters())
     trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    print(f"✅ Total Parameters: {total:,}")
-    print(f"✅ Trainable Parameters: {trainable:,}")
+    print(f"\n✅ Parameters: {total:,} total | {trainable:,} trainable")
 
 if __name__ == "__main__":
     import argparse

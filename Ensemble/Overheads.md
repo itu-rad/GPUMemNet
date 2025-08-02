@@ -6,16 +6,21 @@
 **Output:**
 
 ```
-✅ Inference Time | 
-Min: 2.22 ms 
- Max: 2.53 
-Average: 2.25 ± 0.05 ms
-✅ Peak VRAM usage: 9.25 MB
-✅ FLOPs: 168960.00 FLOPs
-✅ FLOPs: 0.17 MFLOPs
-✅ FLOPs: 0.00 GFLOPs
-✅ Total Parameters: 1,495
-✅ Trainable Parameters: 1,495
+
+🧠 GPU Inference Stats:
+  Min:     2.34 ms
+  Max:     2.61 ms
+  Avg:     2.36 ± 0.03 ms
+  VRAM:    9.25 MB
+
+🧠 CPU Inference Stats:
+  Min:     1.87 ms
+  Max:     2.06 ms
+  Avg:     1.90 ± 0.04 ms
+
+✅ FLOPs: 168960.00 (0.00 GFLOPs)
+
+✅ Parameters: 1,495 total | 1,495 trainable
 
 ```
 
@@ -25,16 +30,21 @@ Average: 2.25 ± 0.05 ms
 **Output:**
 
 ```
-✅ Inference Time | 
-Min: 2.26 ms 
- Max: 2.54 
-Average: 2.27 ± 0.03 ms
-✅ Peak VRAM usage: 9.26 MB
-✅ FLOPs: 187392.00 FLOPs
-✅ FLOPs: 0.19 MFLOPs
-✅ FLOPs: 0.00 GFLOPs
-✅ Total Parameters: 1,646
-✅ Trainable Parameters: 1,646
+
+🧠 GPU Inference Stats:
+  Min:     2.35 ms
+  Max:     2.69 ms
+  Avg:     2.38 ± 0.03 ms
+  VRAM:    9.26 MB
+
+🧠 CPU Inference Stats:
+  Min:     1.89 ms
+  Max:     2.79 ms
+  Avg:     2.00 ± 0.21 ms
+
+✅ FLOPs: 187392.00 (0.00 GFLOPs)
+
+✅ Parameters: 1,646 total | 1,646 trainable
 
 ```
 
@@ -44,16 +54,21 @@ Average: 2.27 ± 0.03 ms
 **Output:**
 
 ```
-✅ Inference Time | 
-Min: 2.28 ms 
- Max: 8.82 
-Average: 2.40 ± 0.65 ms
-✅ Peak VRAM usage: 9.26 MB
-✅ FLOPs: 180224.00 FLOPs
-✅ FLOPs: 0.18 MFLOPs
-✅ FLOPs: 0.00 GFLOPs
-✅ Total Parameters: 1,590
-✅ Trainable Parameters: 1,590
+
+🧠 GPU Inference Stats:
+  Min:     2.33 ms
+  Max:     2.65 ms
+  Avg:     2.39 ± 0.05 ms
+  VRAM:    9.26 MB
+
+🧠 CPU Inference Stats:
+  Min:     1.91 ms
+  Max:     10.28 ms
+  Avg:     2.03 ± 0.83 ms
+
+✅ FLOPs: 180224.00 (0.00 GFLOPs)
+
+✅ Parameters: 1,590 total | 1,590 trainable
 
 ```
 
@@ -64,16 +79,21 @@ Average: 2.40 ± 0.65 ms
 
 ```
 Maximum layers: 46
-✅ Inference Time | 
-Min: 10.46 ms 
- Max: 13.44 
-Average: 10.56 ± 0.30 ms
-✅ Peak VRAM usage: 15.91 MB
-✅ FLOPs: 7465984.00 GFLOPs
-✅ FLOPs: 7.47 MFLOPs
-✅ FLOPs: 0.01 GFLOPs
-✅ Total Parameters: 7,556
-✅ Trainable Parameters: 7,096
+
+🧠 GPU Inference Stats:
+  Min:     11.03 ms
+  Max:     12.10 ms
+  Avg:     11.14 ± 0.15 ms
+  VRAM:    15.91 MB
+
+🧠 CPU Inference Stats:
+  Min:     15.37 ms
+  Max:     17.04 ms
+  Avg:     15.65 ± 0.18 ms
+
+✅ FLOPs: 7465984.00 (0.01 GFLOPs)
+
+✅ Parameters: 7,556 total | 7,096 trainable
 
 ```
 
@@ -86,16 +106,21 @@ Average: 10.56 ± 0.30 ms
 ['GELU' 'SELU' 'ELU' 'ReLU' 'Mish' 'Softplus' 'Tanh' 'PReLU' 'LeakyReLU'
  'SiLU']
 Maximum layers: 119
-✅ Inference Time | 
-Min: 10.68 ms 
- Max: 11.03 
-Average: 10.74 ± 0.05 ms
-✅ Peak VRAM usage: 28.10 MB
-✅ FLOPs: 18453504.00 GFLOPs
-✅ FLOPs: 18.45 MFLOPs
-✅ FLOPs: 0.02 GFLOPs
-✅ Total Parameters: 10,056
-✅ Trainable Parameters: 8,866
+
+🧠 GPU Inference Stats:
+  Min:     10.82 ms
+  Max:     11.51 ms
+  Avg:     10.96 ± 0.09 ms
+  VRAM:    28.10 MB
+
+🧠 CPU Inference Stats:
+  Min:     16.72 ms
+  Max:     26.17 ms
+  Avg:     20.30 ± 2.06 ms
+
+✅ FLOPs: 18453504.00 (0.02 GFLOPs)
+
+✅ Parameters: 10,056 total | 8,866 trainable
 
 ```
 
@@ -106,16 +131,21 @@ Average: 10.74 ± 0.05 ms
 
 ```
 Maximum layers: 314
-✅ Inference Time | 
-Min: 10.63 ms 
- Max: 16.30 
-Average: 10.73 ± 0.56 ms
-✅ Peak VRAM usage: 59.95 MB
-✅ FLOPs: 48210944.00 GFLOPs
-✅ FLOPs: 48.21 MFLOPs
-✅ FLOPs: 0.05 GFLOPs
-✅ Total Parameters: 13,586
-✅ Trainable Parameters: 10,446
+
+🧠 GPU Inference Stats:
+  Min:     10.79 ms
+  Max:     11.89 ms
+  Avg:     11.35 ± 0.38 ms
+  VRAM:    59.95 MB
+
+🧠 CPU Inference Stats:
+  Min:     23.91 ms
+  Max:     31.83 ms
+  Avg:     25.22 ± 0.83 ms
+
+✅ FLOPs: 48210944.00 (0.05 GFLOPs)
+
+✅ Parameters: 13,586 total | 10,446 trainable
 
 ```
 
