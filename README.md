@@ -14,9 +14,8 @@ This repository contains the artifacts for our work on building a deep learningâ
 -	We explored **ensemble method**, reviewed **related work**, and analyzed the **overhead** introduced by both the data parsers and model inference.
  
 
-
-## Related Work data and sources
-We designed experiments to evaluate the effectiveness of the Horus formula and the Fake Tensor library in estimating the GPU memory requirements of deep learning training tasks. Read more [here](Related_works/README.md).
+## How to Use GPUMemNet
+TODO: add a good description, easy and fast to use script, doing estimations
 
 
 
@@ -78,6 +77,8 @@ We also considered and characterized the overheads of parsers and the estimator 
 - [Parser overhead](Test_Pipeline/parser_overhead.md)
 - [Models' inference overhead](Ensemble/Overheads.md)
 
+## Related Work data and sources
+We designed experiments to evaluate the effectiveness of the Horus formula and the Fake Tensor library in estimating the GPU memory requirements of deep learning training tasks. Read more [here](Related_works/README.md).
 
 
 ## Vision
