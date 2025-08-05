@@ -86,7 +86,7 @@ In the discussion section of our paper, we draw the roadmap on how contributors 
 
 ## License & Citation
 
-© 2025 Ehsan Yousefzadeh-Asl-Miandoab. All rights reserved.
+© 2025 Ehsan Yousefzadeh-Asl-Miandoab. Affiliated with the [RAD](rad.itu.dk), [IT University of Copenhagen](itu.dk). All rights reserved.
 
 This repository is released for **non-commercial academic research purposes only** under the following terms:
 
