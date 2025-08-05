@@ -1,6 +1,6 @@
 # GPUMemNet: GPU Memory estimator and Neural Network training dataset
 <p align="center">
-  <img src="image/logo_with_background.png" alt="Alt Text" width="200"/>
+  <img src="Assets/image/logo_with_background.png" alt="Alt Text" width="200"/>
 </p>
 
 This repository contains the artifacts for our work on building a deep learning–based GPU memory estimator for training deep learning models. Since data is central to this effort, we structured the workflow in several key stages:
@@ -82,3 +82,26 @@ We also considered and characterized the overheads of parsers and the estimator 
 
 ## Vision
 In the discussion section of our paper, we draw the roadmap on how contributors can contribute. As it is an deep learning-based estimator, the potential contributions and improvements to the current study can come from more data points, data points from different GPU models, with broader range of arguments, and also innovations on how to view the GPU memory estimation.
+
+
+## License & Citation
+
+© 2025 Ehsan Yousefzadeh-Asl-Miandoab. All rights reserved.
+
+This repository is released for **non-commercial academic research purposes only** under the following terms:
+
+- 📦 **Code and Notebooks**: Custom research-only license. You may use, modify, and share for academic research, but **commercial use is prohibited**.
+- 🧠 **Trained Models**: Provided for academic evaluation only. **Do not use in commercial products or services** without explicit permission.
+- 📊 **Dataset**: Licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).
+- 📈 **Figures and Visualizations**: Also under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).
+
+### 📚 Citation
+
+If you use this repository (code, models, data, or ideas), **you must cite** the following:
+
+**GitHub Repository**  
+Ehsan Yousefzadeh-Asl-Miandoab. *GPUMemNet: Estimating GPU Memory Requirements for Deep Learning Training Tasks*. GitHub Repository: [https://github.com/yourusername/gpumemnet](https://github.com/yourusername/gpumemnet)
+
+**Academic Paper**
+
+##### TODO: archive paper to be added
