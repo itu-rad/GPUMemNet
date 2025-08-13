@@ -103,6 +103,13 @@ If you use this repository (code, models, data, or ideas), **you must cite** the
 **GitHub Repository**  
 Ehsan Yousefzadeh-Asl-Miandoab. *GPUMemNet: Estimating GPU Memory Requirements for Deep Learning Training Tasks*. GitHub Repository: [https://github.com/yourusername/gpumemnet](https://github.com/yourusername/gpumemnet)
 
+```bibtex
+@misc{yousefzadeh2025myproject,
+  author       = {Ehsan Yousefzadeh-Asl-Miandoab},
+  title        = {GPUMemNet: Estimating GPU Memory Requirements for Deep Learning Training Tasks},
+  year         = {2025},
+  howpublished = {\url{https://github.com/yourusername/gpumemnet}},
+}
 **Academic Paper**
 
 ##### TODO: archive paper to be added
