@@ -109,7 +109,8 @@ Ehsan Yousefzadeh-Asl-Miandoab. *GPUMemNet: Estimating GPU Memory Requirements f
   title        = {GPUMemNet: Estimating GPU Memory Requirements for Deep Learning Training Tasks},
   year         = {2025},
   howpublished = {\url{https://github.com/yourusername/gpumemnet}},
-}
+}```
+
 **Academic Paper**
 
 ##### TODO: archive paper to be added
