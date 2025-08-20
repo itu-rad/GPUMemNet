@@ -1,0 +1,5 @@
+,Execution Time (h),GPU Memory (GB),
+1X ResNet152,1.2,8.3,8294
+2X ResNet152,2.1,16.6,16588
+3X ResNet152,3.3,24.9,24882
+7X ResNet152,-,-,58058
