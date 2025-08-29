@@ -101,10 +101,10 @@ This repository is released for **non-commercial academic research purposes only
 If you use this repository (code, models, data, or ideas), **you must cite** the following:
 
 **GitHub Repository**  
-Ehsan Yousefzadeh-Asl-Miandoab. *GPUMemNet: Estimating GPU Memory Requirements for Deep Learning Training Tasks*. GitHub Repository: [https://github.com/yourusername/gpumemnet](https://github.com/yourusername/gpumemnet)
+Ehsan Yousefzadeh-Asl-Miandoab. *GPUMemNet: Estimating GPU Memory Requirements for Deep Learning Training Tasks*. GitHub Repository: [https://github.com/ehsanyousefzadehasl/gpumemnet](https://github.com/ehsanyousefzadehasl/gpumemnet)
 
 ```bibtex
-@misc{yousefzadeh2025myproject,
+@misc{yousefzadeh2025gpumemnet,
   author       = {Ehsan Yousefzadeh-Asl-Miandoab},
   title        = {GPUMemNet: Estimating GPU Memory Requirements for Deep Learning Training Tasks},
   year         = {2025},
