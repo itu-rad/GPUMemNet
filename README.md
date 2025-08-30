@@ -116,4 +116,11 @@ Ehsan Yousefzadeh-Asl-Miandoab. *GPUMemNet: Estimating GPU Memory Requirements f
 
 **Academic Paper**
 
-##### TODO: archive paper to be added
+```bibtex
+@article{yousefzadeh2025carma,
+  title={CARMA: Collocation-Aware Resource Manager with GPU Memory Estimator},
+  author={Yousefzadeh-Asl-Miandoab, Ehsan and Karimzadeh, Reza and Ibragimov, Bulat and Ciorba, Florina M and Tozun, Pinar},
+  journal={arXiv preprint arXiv:2508.19073},
+  year={2025}
+}
+```
