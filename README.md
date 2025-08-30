@@ -1,6 +1,6 @@
 # GPUMemNet: GPU Memory estimator and Neural Network training dataset
 <p align="center">
-  <img src="Assets/image/logo_with_background.png" alt="Alt Text" width="200"/>
+  <img src="Assets/image/logo_with_background.png" alt="GPUMemNet logo" width="200"/>
 </p>
 
 This repository contains the artifacts for our work on building a deep learning–based GPU memory estimator for training deep learning models. Since data is central to this effort, we structured the workflow in several key stages:
