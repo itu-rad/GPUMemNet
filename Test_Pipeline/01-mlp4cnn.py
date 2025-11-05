@@ -317,6 +317,8 @@ def process_model_files(directory, model_file):
             input_features = torch.tensor(input_features, dtype=torch.float32)
             input_features = input_features.view(1, -1)  # Reshape if necessary
 
+            print(input_features)
+            exit()
             with torch.no_grad():
                 logits = model(input_features)
                 predictions = torch.argmax(logits, dim=1)  # Assuming classification task
