@@ -1,6 +1,6 @@
 # GPUMemNet: GPU Memory estimator and Neural Network training dataset
 <p align="center">
-  <img src="Assets/image/logo_with_background.png" alt="Alt Text" width="200"/>
+  <img src="Assets/image/logo_with_background.png" alt="GPUMemNet logo" width="200"/>
 </p>
 
 This repository contains the artifacts for our work on building a deep learning–based GPU memory estimator for training deep learning models. Since data is central to this effort, we structured the workflow in several key stages:
@@ -116,4 +116,11 @@ Ehsan Yousefzadeh-Asl-Miandoab. *GPUMemNet: Estimating GPU Memory Requirements f
 
 **Academic Paper**
 
-##### TODO: archive paper to be added
+```bibtex
+@article{yousefzadeh2025carma,
+  title={CARMA: Collocation-Aware Resource Manager with GPU Memory Estimator},
+  author={Yousefzadeh-Asl-Miandoab, Ehsan and Karimzadeh, Reza and Ibragimov, Bulat and Ciorba, Florina M and Tozun, Pinar},
+  journal={arXiv preprint arXiv:2508.19073},
+  year={2025}
+}
+```
