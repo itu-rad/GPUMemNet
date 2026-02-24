@@ -1,7 +1,4 @@
 # GPUMemNet: GPU Memory estimator and Neural Network training dataset
-<p align="center">
-  <img src="Assets/image/logo_with_background.png" alt="GPUMemNet logo" width="200"/>
-</p>
 
 <p align="center">
   <img src="Assets/image/logo_with_background.png" alt="GPUMemNet logo" width="200"/>
