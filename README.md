@@ -3,6 +3,16 @@
   <img src="Assets/image/logo_with_background.png" alt="GPUMemNet logo" width="200"/>
 </p>
 
+<p align="center">
+  <img src="Assets/image/logo_with_background.png" alt="GPUMemNet logo" width="200"/>
+</p>
+
+<p align="center">
+  <a href="https://arxiv.org/abs/2602.17817"><img src="https://img.shields.io/badge/arXiv-2602.17817-b31b1b.svg"/></a>
+  <a href="https://huggingface.co/datasets/ehyo/GPU-Resources-Estimation-for-Deep-Learning-Training-Tasks"><img src="https://img.shields.io/badge/🤗%20Dataset-GPU--Resources--Estimation-yellow"/></a>
+</p>
+
+
 This repository contains the artifacts for our work on building a deep learning–based GPU memory estimator for training deep learning models. Since data is central to this effort, we structured the workflow in several key stages:
 
 -	**Data Generation**: We developed scripts to automatically generate diverse deep learning training configurations and monitor GPU behavior during training.
@@ -98,7 +108,7 @@ This repository is released for **non-commercial academic research purposes only
 
 ### 📚 Citation
 
-If you use this repository (code, models, data, or ideas), **you must cite** the following:
+If you use this repository (code, models, data, or ideas), **please cite** the following:
 
 **GitHub Repository**  
 Ehsan Yousefzadeh-Asl-Miandoab. *GPUMemNet: Estimating GPU Memory Requirements for Deep Learning Training Tasks*. GitHub Repository: [https://github.com/ehsanyousefzadehasl/gpumemnet](https://github.com/ehsanyousefzadehasl/gpumemnet)
@@ -117,10 +127,13 @@ Ehsan Yousefzadeh-Asl-Miandoab. *GPUMemNet: Estimating GPU Memory Requirements f
 **Academic Paper**
 
 ```bibtex
-@article{yousefzadeh2025carma,
-  title={CARMA: Collocation-Aware Resource Manager with GPU Memory Estimator},
-  author={Yousefzadeh-Asl-Miandoab, Ehsan and Karimzadeh, Reza and Ibragimov, Bulat and Ciorba, Florina M and Tozun, Pinar},
-  journal={arXiv preprint arXiv:2508.19073},
-  year={2025}
+@misc{yousefzadehaslmiandoab2026gpumemoryutilizationestimation,
+      title={GPU Memory and Utilization Estimation for Training-Aware Resource Management: Opportunities and Limitations}, 
+      author={Ehsan Yousefzadeh-Asl-Miandoab and Reza Karimzadeh and Danyal Yorulmaz and Bulat Ibragimov and Pınar Tözün},
+      year={2026},
+      eprint={2602.17817},
+      archivePrefix={arXiv},
+      primaryClass={cs.DC},
+      url={https://arxiv.org/abs/2602.17817}, 
 }
 ```
