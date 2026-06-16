@@ -1,0 +1,26 @@
+GPUMemNet
+
+Copyright 2025 Ehsan Yousefzadeh-Asl-Miandoab,
+IT University of Copenhagen.
+
+GPUMemNet was developed as part of research conducted at the
+IT University of Copenhagen.
+
+The software in this repository is licensed under the Apache License,
+Version 2.0. See the LICENSE file for details.
+
+The datasets distributed with this repository are licensed under the
+Creative Commons Attribution 4.0 International License, unless otherwise
+stated.
+
+GPUMemNet includes contributions associated with the research paper:
+
+“GPU Memory and Utilization Estimation for Training-Aware Resource
+Management: Opportunities and Limitations”
+
+Authors:
+Ehsan Yousefzadeh-Asl-Miandoab
+Reza Karimzadeh
+Danyal Yorulmaz
+Bulat Ibragimov
+Pınar Tözün

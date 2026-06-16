@@ -94,14 +94,23 @@ In the discussion section of our paper, we draw the roadmap on how contributors 
 
 ## License & Citation
 
-© 2025 Ehsan Yousefzadeh-Asl-Miandoab. Affiliated with the [RAD](https://itu-dasyalab.github.io/RAD/), [IT University of Copenhagen](https://itu.dk/). All rights reserved.
+License and Attribution
 
-This repository is released for **non-commercial academic research purposes only** under the following terms:
+GPUMemNet was developed as part of research conducted at the
+IT University of Copenhagen.
 
-- 📦 **Code and Notebooks**: Custom research-only license. You may use, modify, and share for academic research, but **commercial use is prohibited**.
-- 🧠 **Trained Models**: Provided for academic evaluation only. **Do not use in commercial products or services** without explicit permission.
-- 📊 **Dataset**: Licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).
-- 📈 **Figures and Visualizations**: Also under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).
+* Source code and notebooks: Licensed under the
+    Apache License 2.0.
+* Datasets: Licensed under the
+    Creative Commons Attribution 4.0 International License,
+    unless otherwise stated.
+* Documentation and original figures: Licensed under CC BY 4.0,
+    unless otherwise stated.
+
+Copyright 2025 Ehsan Yousefzadeh-Asl-Miandoab,
+IT University of Copenhagen.
+
+See NOTICE for project attribution and contributor information.
 
 ### 📚 Citation
 
