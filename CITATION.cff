@@ -1,0 +1,46 @@
+cff-version: 1.2.0
+message: "If you use GPUMemNet, please cite the associated paper and this software."
+title: "GPUMemNet: GPU Memory Estimation for Deep Learning Training Tasks"
+type: software
+authors:
+  - family-names: "Yousefzadeh-Asl-Miandoab"
+    given-names: "Ehsan"
+    orcid: "https://orcid.org/0000-0003-0156-1435"
+  - family-names: "Karimzadeh"
+    given-names: "Reza"
+    orcid: "https://orcid.org/0000-0003-0911-367X"
+  - family-names: "Yorulmaz"
+    given-names: "Danyal"
+    orcid: "https://orcid.org/0009-0000-2867-6780"
+  - family-names: "Ibragimov"
+    given-names: "Bulat"
+    orcid: "https://orcid.org/0000-0001-7739-7788"
+  - family-names: "Tözün"
+    given-names: "Pınar"
+    orcid: "https://orcid.org/0000-0001-6838-4854"
+repository-code: "https://github.com/itu-rad/GPUMemNet"
+url: "https://github.com/itu-rad/GPUMemNet"
+license: "Apache-2.0"
+preferred-citation:
+  type: conference-paper
+  title: "GPU Memory and Utilization Estimation for Training-Aware Resource Management: Opportunities and Limitations"
+  authors:
+    - family-names: "Yousefzadeh-Asl-Miandoab"
+      given-names: "Ehsan"
+    - family-names: "Karimzadeh"
+      given-names: "Reza"
+    - family-names: "Yorulmaz"
+      given-names: "Danyal"
+    - family-names: "Ibragimov"
+      given-names: "Bulat"
+    - family-names: "Tözün"
+      given-names: "Pınar"
+  collection-title: "Proceedings of the Sixth European Workshop on Machine Learning and Systems"
+  conference:
+    name: "EuroMLSys '26"
+  year: 2026
+  start: 127
+  end: 138
+  publisher:
+    name: "Association for Computing Machinery"
+  doi: "10.1145/3805621.3807621"

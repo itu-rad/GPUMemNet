@@ -5,8 +5,15 @@
 </p>
 
 <p align="center">
-  <a href="https://arxiv.org/abs/2602.17817"><img src="https://img.shields.io/badge/arXiv-2602.17817-b31b1b.svg"/></a>
-  <a href="https://huggingface.co/datasets/ehyo/GPU-Resources-Estimation-for-Deep-Learning-Training-Tasks"><img src="https://img.shields.io/badge/🤗%20Dataset-GPU--Resources--Estimation-yellow"/></a>
+  <a href="https://doi.org/10.1145/3805621.3807621">
+    <img src="https://img.shields.io/badge/Paper-ACM-blue" alt="Paper">
+  </a>
+  <a href="https://huggingface.co/datasets/ehyo/GPU-Resources-Estimation-for-Deep-Learning-Training-Tasks">
+    <img src="https://img.shields.io/badge/Dataset-Hugging%20Face-yellow" alt="Dataset">
+  </a>
+  <a href="https://github.com/itu-rad/GPUMemNet">
+    <img src="https://img.shields.io/badge/Repository-GitHub-black" alt="Repository">
+  </a>
 </p>
 
 
@@ -112,34 +119,25 @@ IT University of Copenhagen.
 
 See NOTICE for project attribution and contributor information.
 
-### 📚 Citation
+### Citation
 
-If you use this repository (code, models, data, or ideas), **please cite** the following:
-
-**GitHub Repository**  
-Ehsan Yousefzadeh-Asl-Miandoab. *GPUMemNet: Estimating GPU Memory Requirements for Deep Learning Training Tasks*. GitHub Repository: [https://github.com/ehsanyousefzadehasl/gpumemnet](https://github.com/ehsanyousefzadehasl/gpumemnet)
+If you use GPUMemNet, its datasets, or its experimental artifacts, please
+cite the associated paper:
 
 ```bibtex
-@misc{yousefzadeh2025gpumemnet,
-  author       = {Ehsan Yousefzadeh-Asl-Miandoab},
-  title        = {GPUMemNet: Estimating GPU Memory Requirements for Deep Learning Training Tasks},
-  year         = {2025},
-  howpublished = {\url{https://github.com/ehsanyousefzadehasl/gpumemnet}},
+@inproceedings{yousefzadehaslmiandoab2026gpumemory,
+  author    = {Ehsan Yousefzadeh-Asl-Miandoab and
+               Reza Karimzadeh and
+               Danyal Yorulmaz and
+               Bulat Ibragimov and
+               Pınar Tözün},
+  title     = {GPU Memory and Utilization Estimation for Training-Aware
+               Resource Management: Opportunities and Limitations},
+  booktitle = {Proceedings of the Sixth European Workshop on Machine
+               Learning and Systems},
+  series    = {EuroMLSys '26},
+  pages     = {127--138},
+  publisher = {Association for Computing Machinery},
+  year      = {2026},
+  doi       = {10.1145/3805621.3807621}
 }
-```
-
-
-
-**Academic Paper**
-
-```bibtex
-@misc{yousefzadehaslmiandoab2026gpumemoryutilizationestimation,
-      title={GPU Memory and Utilization Estimation for Training-Aware Resource Management: Opportunities and Limitations}, 
-      author={Ehsan Yousefzadeh-Asl-Miandoab and Reza Karimzadeh and Danyal Yorulmaz and Bulat Ibragimov and Pınar Tözün},
-      year={2026},
-      eprint={2602.17817},
-      archivePrefix={arXiv},
-      primaryClass={cs.DC},
-      url={https://arxiv.org/abs/2602.17817}, 
-}
-```
